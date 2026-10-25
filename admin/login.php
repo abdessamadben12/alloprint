@@ -70,6 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <?php if (isset($_GET['reset'])): ?><p class="adm-flash adm-flash--ok">Mot de passe modifié. Vous pouvez vous connecter.</p><?php endif; ?>
   <?php if (isset($_GET['expire'])): ?><p class="adm-flash adm-flash--error">Session expirée, reconnectez-vous.</p><?php endif; ?>
   <?php if ($error): ?><p class="adm-flash adm-flash--error" role="alert"><?= e($error) ?></p><?php endif; ?>
+  <?php if ($why = session_storage_problem()): ?><p class="adm-flash adm-flash--error" role="alert"><?= e($why) ?></p><?php endif; ?>
   <form method="post" autocomplete="on">
     <?= csrf_field() ?>
     <div class="field">

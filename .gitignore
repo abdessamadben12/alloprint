@@ -1,0 +1,7 @@
+# Données propres au serveur : ne pas envoyer sur GitHub
+data/sessions/
+data/messages.json
+data/form-rate.json
+data/login-attempts.json
+data/reset.json
+data/smtp.json

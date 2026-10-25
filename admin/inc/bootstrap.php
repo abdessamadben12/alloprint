@@ -34,13 +34,34 @@ const SERVICES = [
 function start_session(): void
 {
     if (session_status() === PHP_SESSION_ACTIVE) return;
-    $secure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off');
+    // Sessions enregistrées dans data/sessions (protégé par data/.htaccess) : certains hébergeurs
+    // ne laissent pas PHP écrire dans leur dossier de sessions par défaut, ce qui casse la connexion.
+    $dir = DATA_DIR . '/sessions';
+    if (!is_dir($dir)) @mkdir($dir, 0700, true);
+    if (is_dir($dir) && is_writable($dir)) {
+        session_save_path($dir);
+        ini_set('session.gc_probability', '1');
+        ini_set('session.gc_divisor', '50');
+        ini_set('session.gc_maxlifetime', '7200');
+    }
+    $secure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+        || strtolower((string)($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '')) === 'https';
     session_name('alloprint_admin');
     session_set_cookie_params([
-        'lifetime' => 0, 'path' => '/', 'secure' => $secure,
-        'httponly' => true, 'samesite' => 'Strict',
+        'lifetime' => 0, 'path' => site_base_path(), 'secure' => $secure,
+        'httponly' => true, 'samesite' => 'Lax',
     ]);
     session_start();
+}
+
+/** Indique pourquoi la session ne tient pas d'une requête à l'autre (diagnostic affiché à la connexion). */
+function session_storage_problem(): ?string
+{
+    $dir = DATA_DIR . '/sessions';
+    if (is_dir($dir) && is_writable($dir)) return null;
+    $path = session_save_path() ?: sys_get_temp_dir();
+    if (is_dir($path) && is_writable($path)) return null;
+    return 'Le serveur ne peut pas enregistrer les sessions : rendez le dossier data/ modifiable par PHP (droits 755 ou 775 dans le gestionnaire de fichiers cPanel), puis rechargez la page.';
 }
 
 function send_security_headers(): void
@@ -188,7 +209,8 @@ function check_csrf(): void
     $sent = $_POST['csrf'] ?? '';
     if (!is_string($sent) || empty($_SESSION['csrf']) || !hash_equals($_SESSION['csrf'], $sent)) {
         http_response_code(400);
-        exit('Session expirée ou requête invalide. Rechargez la page et réessayez.');
+        $why = session_storage_problem();
+        exit($why ?? 'Session expirée ou requête invalide. Rechargez la page et réessayez.');
     }
 }
 
