@@ -5,11 +5,15 @@ function admin_header(string $title, string $active = ''): void
 {
     send_security_headers();
     $nav = [
-        'index.php'    => ['dashboard', 'Tableau de bord'],
-        'articles.php' => ['articles', 'Articles'],
-        'prix.php'     => ['prix', 'Prix des services'],
-        'seo.php'      => ['seo', 'Référencement (SEO)'],
+        './'       => ['dashboard', 'Tableau de bord'],
+        'messages' => ['messages', 'Messages reçus'],
+        'articles' => ['articles', 'Articles'],
+        'prix'     => ['prix', 'Prix des services'],
+        'seo'      => ['seo', 'Référencement (SEO)'],
+        'smtp'     => ['smtp', 'Messagerie (SMTP)'],
+        'compte'   => ['compte', 'Mon compte'],
     ];
+    $unread = count(array_filter(read_json('messages', []), fn($m) => empty($m['lu'])));
     ?><!doctype html>
 <html lang="fr">
 <head>
@@ -22,15 +26,15 @@ function admin_header(string $title, string $active = ''): void
 </head>
 <body class="adm">
 <header class="adm-side">
-  <a class="adm-brand" href="index.php"><img src="../images/logo.png" alt="AlloPrint" width="80" height="64"><span>Administration</span></a>
+  <a class="adm-brand" href="./"><img src="../images/logo.png" alt="AlloPrint" width="80" height="64"><span>Administration</span></a>
   <button class="adm-burger" type="button" aria-expanded="false" aria-controls="adm-nav" onclick="const n=document.getElementById('adm-nav');const o=n.classList.toggle('is-open');this.setAttribute('aria-expanded',o)">Menu</button>
   <nav id="adm-nav" class="adm-nav" aria-label="Administration">
     <?php foreach ($nav as $href => [$key, $label]): ?>
-      <a href="<?= $href ?>"<?= $active === $key ? ' aria-current="page"' : '' ?>><?= e($label) ?></a>
+      <a href="<?= $href ?>"<?= $active === $key ? ' aria-current="page"' : '' ?>><?= e($label) ?><?php if ($key === 'messages' && $unread): ?><span class="nav-count"><?= $unread ?></span><?php endif; ?></a>
     <?php endforeach; ?>
     <hr>
-    <a href="../index.html" target="_blank" rel="noopener">Voir le site ↗</a>
-    <form method="post" action="logout.php"><?= csrf_field() ?><button type="submit" class="adm-linkbtn">Se déconnecter</button></form>
+    <a href="../" target="_blank" rel="noopener">Voir le site ↗</a>
+    <form method="post" action="logout"><?= csrf_field() ?><button type="submit" class="adm-linkbtn">Se déconnecter</button></form>
   </nav>
 </header>
 <main class="adm-main">

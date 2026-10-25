@@ -4,7 +4,7 @@ require __DIR__ . '/inc/bootstrap.php';
 start_session();
 send_security_headers();
 
-if (is_logged_in()) { header('Location: index.php'); exit; }
+if (is_logged_in()) { redirect_to('admin/'); }
 
 $account = admin_account();
 $setup = $account === null;           // premier accès : création du compte
@@ -13,13 +13,13 @@ $locked = $setup ? 0 : login_locked_for();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     check_csrf();
-    $user = post_str('username', 60);
+    $user = post_str('username', 120);
     $pass = is_string($_POST['password'] ?? null) ? $_POST['password'] : '';
 
     if ($setup) {
         $pass2 = is_string($_POST['password2'] ?? null) ? $_POST['password2'] : '';
-        if (!preg_match('/^[A-Za-z0-9._@-]{3,60}$/', $user)) {
-            $error = 'Identifiant : 3 caractères minimum (lettres, chiffres, . _ - @).';
+        if (!filter_var($user, FILTER_VALIDATE_EMAIL)) {
+            $error = 'Indiquez une adresse e-mail valide.';
         } elseif (mb_strlen($pass) < 10) {
             $error = 'Le mot de passe doit contenir au moins 10 caractères.';
         } elseif ($pass !== $pass2) {
@@ -28,24 +28,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             write_json('admin', ['username' => $user, 'password_hash' => password_hash($pass, PASSWORD_DEFAULT), 'created' => date('c')]);
             login($user);
             flash('ok', 'Compte administrateur créé. Bienvenue !');
-            header('Location: index.php');
-            exit;
+            redirect_to('admin/');
         }
     } elseif ($locked > 0) {
         $error = 'Trop de tentatives. Réessayez dans ' . ceil($locked / 60) . ' minute(s).';
-    } elseif (hash_equals($account['username'], $user) && password_verify($pass, $account['password_hash'])) {
+    } elseif (hash_equals(mb_strtolower($account['username']), mb_strtolower($user)) && password_verify($pass, $account['password_hash'])) {
         clear_login_failures();
         if (password_needs_rehash($account['password_hash'], PASSWORD_DEFAULT)) {
             $account['password_hash'] = password_hash($pass, PASSWORD_DEFAULT);
             write_json('admin', $account);
         }
         login($user);
-        header('Location: index.php');
-        exit;
+        redirect_to('admin/');
     } else {
         register_login_failure();
         usleep(400000);
-        $error = 'Identifiant ou mot de passe incorrect.';
+        $error = 'E-mail ou mot de passe incorrect.';
         $locked = login_locked_for();
     }
 }
@@ -55,6 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
+<base href="<?= e(site_base_path()) ?>admin/">
 <title><?= $setup ? 'Créer le compte' : 'Connexion' ?> — Admin AlloPrint</title>
 <link rel="icon" type="image/png" href="../images/logo.png">
 <link rel="stylesheet" href="admin.css">
@@ -63,14 +62,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <main class="card">
   <img src="../images/logo.png" alt="AlloPrint" width="96" height="77">
   <h1><?= $setup ? 'Créer le compte admin' : 'Espace administration' ?></h1>
-  <p class="lead"><?= $setup ? 'Premier accès : choisissez votre identifiant et votre mot de passe.' : 'Connectez-vous pour gérer les articles et les prix.' ?></p>
+  <p class="lead"><?= $setup ? 'Premier accès : choisissez l’adresse e-mail de connexion et le mot de passe.' : 'Connectez-vous pour gérer les articles et les prix.' ?></p>
+  <?php if (isset($_GET['reset'])): ?><p class="adm-flash adm-flash--ok">Mot de passe modifié. Vous pouvez vous connecter.</p><?php endif; ?>
   <?php if (isset($_GET['expire'])): ?><p class="adm-flash adm-flash--error">Session expirée, reconnectez-vous.</p><?php endif; ?>
   <?php if ($error): ?><p class="adm-flash adm-flash--error" role="alert"><?= e($error) ?></p><?php endif; ?>
   <form method="post" autocomplete="on">
     <?= csrf_field() ?>
     <div class="field">
-      <label for="username">Identifiant</label>
-      <input id="username" name="username" type="text" required autocomplete="username" autofocus value="<?= e(post_str('username', 60)) ?>">
+      <label for="username">Adresse e-mail</label>
+      <input id="username" name="username" type="email" required autocomplete="username" autofocus placeholder="contact@alloprint.ma" value="<?= e(post_str('username', 120)) ?>">
     </div>
     <div class="field">
       <label for="password">Mot de passe<?php if ($setup): ?><span class="hint">10 caractères minimum.</span><?php endif; ?></label>
@@ -84,7 +84,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <?php endif; ?>
     <button class="btn btn--dark" type="submit" style="width:100%"><?= $setup ? 'Créer mon compte' : 'Se connecter' ?></button>
   </form>
-  <p style="text-align:center;margin:18px 0 0"><a href="../index.html">← Retour au site</a></p>
+  <?php if (!$setup): ?><p style="text-align:center;margin:16px 0 0"><a href="oubli">Mot de passe oublié ?</a></p><?php endif; ?>
+  <p style="text-align:center;margin:10px 0 0"><a href="../">← Retour au site</a></p>
 </main>
 </body>
 </html>

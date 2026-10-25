@@ -1,28 +1,39 @@
 # Espace d’administration AlloPrint
 
-Adresse : **/admin/** (par ex. https://alloprint.ma/admin/)
+## Adresses
+- Connexion : **ton-domaine/login** (ex. https://alloprint.ma/login)
+- Administration : **ton-domaine/admin/**
+- Les pages du site n’ont plus d’extension : /services, /contact, /devis, /notre-imprimerie, /articles, /article/titre-de-l-article…
+  Les anciennes adresses (.html / .php) redirigent automatiquement (301) vers les nouvelles.
+  Tout cela passe par le fichier `.htaccess` à la racine du site (Apache : cPanel, XAMPP — module « rewrite » activé, ce qui est le cas par défaut).
+
+## Connexion
+- E-mail : **contact@alloprint.ma**
+- Mot de passe : celui communiqué à la livraison. Changez-le dans **Admin › Mon compte**.
+- « Mot de passe oublié ? » sur la page de connexion envoie un lien valable 1 heure (nécessite le SMTP configuré).
+- Sans SMTP et sans accès : supprimez `data/admin.json` sur le serveur, puis ouvrez /login pour recréer le compte.
+
+## Messagerie (SMTP) — formulaires Devis et Contact
+Admin › **Messagerie (SMTP)** :
+- Adresse e-mail (identifiant SMTP) et **mot de passe de la boîte mail** (jamais réaffiché ; laisser vide pour le conserver).
+- Serveur (souvent `mail.alloprint.ma`), sécurité SSL/465 ou TLS/587 : voir cPanel › Comptes e-mail › « Configurer le client de messagerie ».
+- Adresse(s) de réception des demandes, accusé de réception automatique au client.
+- Bouton « Envoyer un e-mail de test ».
+
+Chaque demande est aussi enregistrée dans **Admin › Messages reçus** (même si l’e-mail ne part pas), avec un bouton « Répondre ».
+Protection anti-spam : champ piège invisible, délai minimum, 5 envois max. par 15 min et par adresse IP.
+
+## Le reste
+- **Articles** : création, image, publication, métadonnées SEO.
+- **Prix des services** : prix affichés sur les pages de services.
+- **Référencement (SEO)** : titre et description de chaque page.
 
 ## Mise en ligne
-Voir d’abord [CONFIGURATION.md](CONFIGURATION.md) pour le serveur, PHP Server dans VS Code, le sitemap et les réglages SEO.
+1. PHP 8.0 ou plus, Apache avec `.htaccess` autorisé.
+2. Dossiers `data/` et `uploads/articles/` modifiables par PHP (755/775). Pages `.html` modifiables pour l’onglet SEO.
+3. Utilisez le site en HTTPS.
+- `data/`, `admin/inc/` et les fichiers `.json` / `.md` sont interdits au web. Aucun script ne s’exécute dans `uploads/`.
+- Serveur Nginx : reproduire les règles du `.htaccess` dans la configuration.
 
-1. Hébergement **PHP 8.2 ou plus récent, dans une version maintenue** (cPanel / Apache classique). Aucune base de données n’est nécessaire : tout est enregistré dans `data/` en fichiers JSON.
-2. Envoyez tout le dossier `site/` sur le serveur.
-3. Les dossiers `data/` et `uploads/articles/` doivent être **modifiables par PHP** (droits 755 ou 775 selon l’hébergeur). Les pages `.html` doivent aussi l’être si vous voulez modifier leurs titres et descriptions depuis l’onglet « Référencement ».
-4. Ouvrez **/admin/** en local ou derrière un accès protégé avant publication : au premier accès, la page demande de **créer le compte administrateur** (identifiant + mot de passe de 10 caractères minimum).
-
-## Ce que l’on peut faire
-- **Articles** : créer, modifier, publier ou mettre en brouillon, supprimer. Image de couverture, résumé, service lié, et **métadonnées SEO** (titre SEO, méta-description, adresse de la page, option « ne pas indexer »). Les articles publiés apparaissent sur `articles.php`, chacun sur `article.php?slug=…` (avec balises Open Graph et données structurées Google).
-- **Prix des services** : un prix indicatif par service (mention « À partir de », « Prix fixe » ou « Environ », unité, HT/TTC, précision). Il s’affiche dans l’encadré « Votre projet, votre budget » de la page du service et sur la page Services. Les pages lisent les prix via `api/prix.php`.
-- **Référencement (SEO)** : titre et méta-description de chaque page du site (accueil, services, contact…). Les balises Open Graph sont mises à jour en même temps.
-
-## Sécurité
-- Mot de passe chiffré (`password_hash`), session sécurisée, protection CSRF sur tous les formulaires, blocage 15 minutes après 5 échecs de connexion, déconnexion après 2 h d’inactivité.
-- `data/` et `admin/inc/` sont interdits au web par `.htaccess` ; aucun script ne peut s’exécuter dans `uploads/`.
-- **Serveur Nginx** (sans `.htaccess`) : ajoutez l’équivalent dans la configuration : `location ~ ^/(data|admin/inc|inc)/ { deny all; }` et interdisez PHP dans `/uploads/`.
-- Utilisez le site en **HTTPS**.
-
-## Mot de passe oublié
-Supprimez le fichier `data/admin.json` (par FTP ou le gestionnaire de fichiers) puis ouvrez /admin/ : la création du compte est proposée à nouveau. Les articles et les prix sont conservés.
-
-## À savoir
-Les pages `.php` (articles, admin) ne fonctionnent qu’à travers un serveur PHP, pas en ouvrant le fichier directement sur l’ordinateur. Pour tester en local : `php -S localhost:8000 router.php` dans le dossier `site/`, puis ouvrez http://localhost:8000/admin/. Le routeur applique les protections que le serveur intégré ne lit pas dans les `.htaccess`.
+## Tester en local
+XAMPP : copiez `site/` dans `htdocs/alloprint/site/`, puis ouvrez http://localhost/alloprint/site/login.

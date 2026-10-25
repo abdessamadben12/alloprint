@@ -28,7 +28,7 @@ h2 { margin: 0 0 12px; font-size: 20px; color: var(--c1); }
 
 label { display: block; font-weight: 700; margin-bottom: 6px; }
 .hint { display: block; font-weight: 400; color: #5b6b72; font-size: 14px; margin-top: 4px; }
-input[type=text], input[type=password], input[type=number], input[type=date], input[type=url], select, textarea {
+input[type=text], input[type=email], input[type=password], input[type=number], input[type=date], input[type=url], select, textarea {
   width: 100%; padding: 11px 13px; border: 1.5px solid #b9c3c8; border-radius: 9px; font: inherit; color: inherit; background: #fff; }
 textarea { min-height: 120px; resize: vertical; }
 textarea.big { min-height: 360px; font-family: ui-monospace, "SFMono-Regular", Consolas, monospace; font-size: 15px; }
@@ -94,3 +94,9 @@ th { font-size: 13px; text-transform: uppercase; letter-spacing: .04em; color: #
   .price-row { grid-template-columns: 1fr 1fr; }
   .price-row > :first-child { grid-column: 1 / -1; }
 }
+.msg__fields { display: grid; grid-template-columns: 140px minmax(0, 1fr); gap: 6px 14px; margin: 0; }
+.msg__fields dt { font-weight: 700; color: var(--c1); }
+.msg__fields dd { margin: 0; overflow-wrap: anywhere; }
+.msg--read { opacity: .72; }
+.nav-count { display: inline-grid; place-items: center; min-width: 22px; height: 22px; margin-left: 6px; padding: 0 6px; border-radius: 999px; background: var(--c2); color: var(--c4); font-size: 12px; }
+@media (max-width: 600px) { .msg__fields { grid-template-columns: 1fr; } .msg__fields dd { margin-bottom: 8px; } }

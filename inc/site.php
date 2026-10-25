@@ -1,12 +1,9 @@
 <?php
 /** Gabarit public partagé par les pages PHP (articles). Même en-tête et pied de page que les pages HTML. */
 declare(strict_types=1);
-require_once __DIR__ . '/config.php';
 
 function site_header(array $meta, string $current = ''): void
 {
-    header('Content-Type: text/html; charset=utf-8');
-    header('X-Content-Type-Options: nosniff');
     $title = $meta['title'] ?? 'AlloPrint';
     $desc = $meta['description'] ?? '';
     $canonical = $meta['canonical'] ?? '';
@@ -19,15 +16,14 @@ function site_header(array $meta, string $current = ''): void
   <a class="nav__skip" href="#main">Aller au contenu</a>
   <div class="nav__shell">
     <div class="nav__bar wrap">
-      <a class="nav__brand" href="index.html" title="Accueil"><img class="nav__logo" src="images/logo.png" alt="AlloPrint" width="160" height="128"></a>
+      <a class="nav__brand" href="./" title="Accueil"><img class="nav__logo" src="images/logo.png" alt="AlloPrint" width="160" height="128"></a>
       <nav class="nav__links" aria-label="Principal">
-        <a class="m-link" href="services.html">Services</a>
-        <a class="m-link" href="index.html#editions">Réalisations</a>
-        <a class="m-link" href="notre-imprimerie.html">L’atelier</a>
-        <a class="m-link" href="articles.php">Articles</a>
-        <a class="m-link" href="contact.html">Contact</a>
+        <a class="m-link" href="services">Services</a>
+        <a class="m-link" href="./#editions">Réalisations</a>
+        <a class="m-link" href="notre-imprimerie">L’imprimerie</a>
+        <a class="m-link" href="contact">Contact</a>
       </nav>
-      <a class="m-btn nav__cta" href="devis.html"><span class="m-btn__label">Demander un devis</span></a>
+      <a class="m-btn nav__cta" href="devis"><span class="m-btn__label">Demander un devis</span></a>
       <button class="m-icon-btn nav__toggle" type="button" aria-expanded="false" aria-controls="menu"><span class="burger" aria-hidden="true"><i></i><i></i><i></i></span><span class="m-icon-btn__name">Ouvrir le menu</span></button>
     </div>
   </div>
@@ -37,15 +33,14 @@ function site_header(array $meta, string $current = ''): void
       <button class="m-icon-btn nav__close" type="button"><span class="xmark" aria-hidden="true"></span><span class="m-icon-btn__name">Fermer le menu</span></button>
     </div>
     <nav class="nav__menu-links" aria-label="Menu">
-      <a href="index.html"><span>Accueil</span><span class="nav__arrow" aria-hidden="true">→</span></a>
-      <a href="services.html"><span>Services</span><span class="nav__arrow" aria-hidden="true">→</span></a>
-      <a href="index.html#editions"><span>Réalisations</span><span class="nav__arrow" aria-hidden="true">→</span></a>
-      <a href="notre-imprimerie.html"><span>L’atelier</span><span class="nav__arrow" aria-hidden="true">→</span></a>
-      <a href="articles.php"><span>Articles</span><span class="nav__arrow" aria-hidden="true">→</span></a>
-      <a href="contact.html"><span>Contact</span><span class="nav__arrow" aria-hidden="true">→</span></a>
+      <a href="./"><span>Accueil</span><span class="nav__arrow" aria-hidden="true">→</span></a>
+      <a href="services"><span>Services</span><span class="nav__arrow" aria-hidden="true">→</span></a>
+      <a href="./#editions"><span>Réalisations</span><span class="nav__arrow" aria-hidden="true">→</span></a>
+      <a href="notre-imprimerie"><span>L’imprimerie</span><span class="nav__arrow" aria-hidden="true">→</span></a>
+      <a href="contact"><span>Contact</span><span class="nav__arrow" aria-hidden="true">→</span></a>
     </nav>
     <div class="nav__menu-extra">
-      <a class="m-btn nav__menu-cta" href="devis.html"><span class="m-btn__label">Demander un devis gratuit</span></a>
+      <a class="m-btn nav__menu-cta" href="devis"><span class="m-btn__label">Demander un devis gratuit</span></a>
       <div class="nav__quick">
         <a href="tel:+212522484425"><img src="images/icons/telephone.svg" alt="" aria-hidden="true" width="28" height="28">Appeler</a>
         <a href="https://wa.me/212668746386" target="_blank" rel="noopener"><img src="images/icons/whatsapp.svg" alt="" aria-hidden="true" width="28" height="28">WhatsApp</a>
@@ -56,10 +51,13 @@ function site_header(array $meta, string $current = ''): void
 </header>
 HTML;
     if ($current) $nav = str_replace('href="' . $current . '"', 'href="' . $current . '" aria-current="page"', $nav);
+    // avec <base>, les ancres doivent garder l'adresse de la page en cours
+    $nav = str_replace('href="#main"', 'href="' . e(current_path()) . '#main"', $nav);
     ?><!doctype html>
 <html lang="fr">
 <head>
 <meta charset="utf-8">
+<base href="<?= e(site_base_path()) ?>">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title><?= e($title) ?></title>
 <meta name="description" content="<?= e($desc) ?>">
@@ -94,13 +92,13 @@ function site_footer(): void
     <div class="footer__cols">
       <nav class="footer__nav" aria-label="Pied de page">
         <ul>
-          <li><a class="m-link" href="index.html">Accueil</a></li>
-          <li><a class="m-link" href="services.html">Services</a></li>
-          <li><a class="m-link" href="notre-imprimerie.html">Notre atelier d’impression</a></li>
-          <li><a class="m-link" href="articles.php">Articles</a></li>
-          <li><a class="m-link" href="index.html#editions">Réalisations</a></li>
-          <li><a class="m-link" href="devis.html">Devis</a></li>
-          <li><a class="m-link" href="contact.html">Contact</a></li>
+          <li><a class="m-link" href="./">Accueil</a></li>
+          <li><a class="m-link" href="services">Services</a></li>
+          <li><a class="m-link" href="notre-imprimerie">Notre imprimerie</a></li>
+          <li><a class="m-link" href="articles">Articles</a></li>
+          <li><a class="m-link" href="./#editions">Réalisations</a></li>
+          <li><a class="m-link" href="devis">Devis</a></li>
+          <li><a class="m-link" href="contact">Contact</a></li>
         </ul>
       </nav>
       <p class="footer__address">3, avenue 2 Mars, Résidence Marwa, 5e étage<br>Casablanca, Maroc</p>
@@ -111,8 +109,8 @@ function site_footer(): void
       </ul>
     </div>
     <div class="footer__base">
-      <p class="m-text-4">© 2026 AlloPrint · Impression à Casablanca</p>
-      <a class="m-link" href="#nav">Retour en haut</a>
+      <p class="m-text-4">© 2026 AlloPrint · Imprimerie à Casablanca</p>
+      <a class="m-link" href="<?= e(current_path()) ?>#nav">Retour en haut</a>
     </div>
   </div>
 </footer>
@@ -124,8 +122,15 @@ function site_footer(): void
 </html><?php
 }
 
-/** Adresse absolue de la page courante (pour canonical / Open Graph). */
+/** Adresse absolue d'un chemin du site (pour canonical / Open Graph). */
 function site_url(string $path = ''): string
 {
-    return public_base_url() . '/' . ltrim($path, '/');
+    return site_abs_url($path);
+}
+
+/** Chemin de la page en cours (sans domaine), pour les ancres internes. */
+function current_path(): string
+{
+    $uri = (string)($_SERVER['REQUEST_URI'] ?? '/');
+    return strtok($uri, '#') ?: '/';
 }

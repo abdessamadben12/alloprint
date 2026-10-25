@@ -6,7 +6,7 @@ require_login();
 
 $id = is_string($_GET['id'] ?? null) ? $_GET['id'] : '';
 $article = $id !== '' ? find_article($id) : null;
-if ($id !== '' && !$article) { flash('error', 'Article introuvable.'); header('Location: articles.php'); exit; }
+if ($id !== '' && !$article) { flash('error', 'Article introuvable.'); redirect_to('admin/articles'); }
 $isNew = $article === null;
 $a = $article ?? [
     'id' => '', 'titre' => '', 'slug' => '', 'extrait' => '', 'contenu' => '', 'image' => '', 'image_alt' => '',
@@ -62,8 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         write_json('articles', $list);
         flash('ok', $a['statut'] === 'publie' ? 'Article enregistré et publié.' : 'Brouillon enregistré.');
-        header('Location: article.php?id=' . urlencode($a['id']));
-        exit;
+        redirect_to('admin/article?id=' . urlencode($a['id']));
     }
 }
 
@@ -140,7 +139,7 @@ foreach ($errors as $err): ?><p class="adm-flash adm-flash--error" role="alert">
       </div>
       <div class="actions">
         <button class="btn btn--dark" type="submit">Enregistrer</button>
-        <?php if (!$isNew && $a['statut'] === 'publie'): ?><a class="btn btn--ghost" href="../article.php?slug=<?= e($a['slug']) ?>" target="_blank" rel="noopener">Voir ↗</a><?php endif; ?>
+        <?php if (!$isNew && $a['statut'] === 'publie'): ?><a class="btn btn--ghost" href="../article/<?= e($a['slug']) ?>" target="_blank" rel="noopener">Voir ↗</a><?php endif; ?>
       </div>
     </div>
     <div class="card">

@@ -28,8 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     write_json('prix', $save);
     flash($errors ? 'error' : 'ok', $errors ? implode(' ', $errors) . ' Les autres prix ont été enregistrés.' : 'Prix enregistrés. Ils sont visibles sur le site immédiatement.');
-    header('Location: prix.php');
-    exit;
+    redirect_to('admin/prix');
 }
 
 $prices = all_prices();
@@ -43,7 +42,7 @@ admin_header('Prix des services', 'prix');
     <fieldset class="price-row" style="margin:0">
       <div>
         <h3><?= e($p['label']) ?></h3>
-        <a class="preview" href="../<?= e($p['page']) ?>" target="_blank" rel="noopener">Voir la page ↗</a>
+        <a class="preview" href="../<?= e(str_replace('.html', '', $p['page'])) ?>" target="_blank" rel="noopener">Voir la page ↗</a>
       </div>
       <div class="field">
         <label for="m-<?= $k ?>">Mention</label>

@@ -1,41 +1,63 @@
-# Apache 2.4. L’accueil reste index.html ; PHP sert les articles, le sitemap et l’admin.
+# AlloPrint — adresses propres (sans .html / .php)
+#   /services, /contact, /devis…  → pages .html
+#   /articles, /article/mon-article → articles PHP
+#   /login                          → connexion à l'administration
+#   /admin/…                        → pages de l'administration
+Options -MultiViews -Indexes
 DirectoryIndex index.html index.php
-Options -Indexes -MultiViews
-AddDefaultCharset UTF-8
-
-<FilesMatch "(?i)(^\.|\.(json|ini|log|md|bak|tmp|sql|ps1|py)$|^router\.php$)">
-    Require all denied
-</FilesMatch>
 
 <IfModule mod_rewrite.c>
-    RewriteEngine On
-    RewriteRule ^(?:data|inc|admin/inc)(?:/|$) - [F,L,NC]
-    RewriteRule ^uploads/.*\.(?:php[0-9]?|phtml|phar|cgi|pl|py|sh|html?|svg)$ - [F,L,NC]
-    RewriteRule ^sitemap\.xml$ sitemap.php [L]
-    # Ancienne adresse de l’accueil, sans créer de fichier index.php.
-    RewriteRule ^index\.php$ index.html [R=301,L]
-    RewriteRule ^impression-lettrage\.html$ impression-vitrine.html [R=301,L]
-    # Ne s’applique qu’au domaine de production ; localhost reste en HTTP.
-    RewriteCond %{HTTP_HOST} ^(?:www\.)?alloprint\.ma$ [NC]
-    RewriteCond %{HTTPS} !=on [OR]
-    RewriteCond %{HTTP_HOST} ^www\.alloprint\.ma$ [NC]
-    RewriteRule ^ https://alloprint.ma%{REQUEST_URI} [R=301,L,NE]
+RewriteEngine On
+
+# Chemin de base du site (fonctionne à la racine du domaine comme dans un sous-dossier XAMPP)
+RewriteCond %{REQUEST_URI}::$1 ^(.*?/)(.*)::\2$
+RewriteRule ^(.*)$ - [E=BASE:%1]
+
+# --- Redirections 301 des anciennes adresses vers les adresses propres (requêtes GET uniquement) ---
+RewriteRule ^impression-lettrage(\.html)?$ %{ENV:BASE}impression-vitrine [R=301,L]
+
+RewriteCond %{REQUEST_METHOD} GET
+RewriteCond %{THE_REQUEST} \s[^?\s]*/index\.html[\s?]
+RewriteRule ^(.*/)?index\.html$ %{ENV:BASE}$1 [R=301,L]
+
+RewriteCond %{REQUEST_METHOD} GET
+RewriteCond %{THE_REQUEST} \s[^?\s]*\.html[\s?]
+RewriteRule ^(.+)\.html$ %{ENV:BASE}$1 [R=301,L]
+
+RewriteCond %{REQUEST_METHOD} GET
+RewriteCond %{THE_REQUEST} \s[^?\s]*/article\.php\?slug=([a-z0-9-]+)[\s&]
+RewriteRule ^article\.php$ %{ENV:BASE}article/%1? [R=301,L]
+
+RewriteCond %{REQUEST_METHOD} GET
+RewriteCond %{THE_REQUEST} \s[^?\s]*/articles\.php[\s?]
+RewriteRule ^articles\.php$ %{ENV:BASE}articles [R=301,L]
+
+RewriteCond %{REQUEST_METHOD} GET
+RewriteCond %{THE_REQUEST} \s[^?\s]*/admin/login\.php[\s?]
+RewriteRule ^admin/login\.php$ %{ENV:BASE}login [R=301,L,QSA]
+
+# Retire la barre finale sur les pages (ex. /services/ → /services), sauf vrais dossiers
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.+)/$ %{ENV:BASE}$1 [R=301,L]
+
+# --- Correspondances adresse propre → fichier ---
+RewriteRule ^login/?$ admin/login.php [L,QSA]
+RewriteRule ^article/([a-z0-9-]+)/?$ article.php?slug=$1 [L,QSA]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.html -f
+RewriteRule ^(.+)$ $1.html [L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^(.+)$ $1.php [L,QSA]
 </IfModule>
 
-<IfModule mod_headers.c>
-    Header always set X-Content-Type-Options "nosniff"
-    Header always set Referrer-Policy "strict-origin-when-cross-origin"
-    Header always set X-Frame-Options "SAMEORIGIN"
-</IfModule>
-<IfModule mod_deflate.c>
-    AddOutputFilterByType DEFLATE text/html text/plain text/css application/javascript application/json application/xml image/svg+xml
-</IfModule>
-<IfModule mod_expires.c>
-    ExpiresActive On
-    ExpiresByType text/css "access plus 1 day"
-    ExpiresByType application/javascript "access plus 1 day"
-    ExpiresByType image/webp "access plus 30 days"
-    ExpiresByType image/jpeg "access plus 30 days"
-    ExpiresByType image/png "access plus 30 days"
-    ExpiresByType image/svg+xml "access plus 30 days"
-</IfModule>
+# Fichiers sensibles jamais servis
+<FilesMatch "^(ADMIN\.md|CREDITS\.md|LICENSE|.*\.json)$">
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+</FilesMatch>

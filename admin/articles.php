@@ -19,16 +19,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'delet
     }
     write_json('articles', $kept);
     flash('ok', 'Article supprimé.');
-    header('Location: articles.php');
-    exit;
+    redirect_to('admin/articles');
 }
 
 $articles = all_articles();
 admin_header('Articles', 'articles');
 ?>
 <div class="toolbar">
-  <p style="margin:0"><?= count($articles) ?> article(s). Les articles publiés apparaissent sur la page <a href="../articles.php" target="_blank" rel="noopener">Articles ↗</a>.</p>
-  <a class="btn" href="article.php">+ Nouvel article</a>
+  <p style="margin:0"><?= count($articles) ?> article(s). Les articles publiés apparaissent sur la page <a href="../articles" target="_blank" rel="noopener">Articles ↗</a>.</p>
+  <a class="btn" href="article">+ Nouvel article</a>
 </div>
 <div class="card table-wrap">
 <?php if (!$articles): ?>
@@ -40,13 +39,13 @@ admin_header('Articles', 'articles');
     <?php foreach ($articles as $a): $pub = ($a['statut'] ?? '') === 'publie'; ?>
       <tr>
         <td><?php if (!empty($a['image'])): ?><img class="thumb" src="../<?= e($a['image']) ?>" alt=""><?php else: ?><span class="thumb"></span><?php endif; ?></td>
-        <td><a href="article.php?id=<?= e($a['id']) ?>"><b><?= e($a['titre']) ?></b></a><br><small>/article.php?slug=<?= e($a['slug']) ?></small></td>
+        <td><a href="article?id=<?= e($a['id']) ?>"><b><?= e($a['titre']) ?></b></a><br><small>/article/<?= e($a['slug']) ?></small></td>
         <td><span class="badge <?= $pub ? 'badge--pub' : 'badge--draft' ?>"><?= $pub ? 'Publié' : 'Brouillon' ?></span></td>
         <td><?= e(format_date_fr($a['date'] ?? '')) ?></td>
         <td>
           <div class="actions">
-            <a class="btn btn--small btn--ghost" href="article.php?id=<?= e($a['id']) ?>">Modifier</a>
-            <?php if ($pub): ?><a class="btn btn--small btn--ghost" href="../article.php?slug=<?= e($a['slug']) ?>" target="_blank" rel="noopener">Voir ↗</a><?php endif; ?>
+            <a class="btn btn--small btn--ghost" href="article?id=<?= e($a['id']) ?>">Modifier</a>
+            <?php if ($pub): ?><a class="btn btn--small btn--ghost" href="../article/<?= e($a['slug']) ?>" target="_blank" rel="noopener">Voir ↗</a><?php endif; ?>
             <form method="post" onsubmit="return confirm('Supprimer définitivement cet article ?')">
               <?= csrf_field() ?><input type="hidden" name="action" value="delete"><input type="hidden" name="id" value="<?= e($a['id']) ?>">
               <button class="btn btn--small btn--danger" type="submit">Supprimer</button>

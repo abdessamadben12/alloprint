@@ -4,7 +4,8 @@
  * Stockage en fichiers JSON (dossier data/, protégé par .htaccess) : aucune base de données à configurer.
  */
 declare(strict_types=1);
-require_once __DIR__ . '/../../inc/config.php';
+
+date_default_timezone_set('Africa/Casablanca');
 
 const SITE_ROOT = __DIR__ . '/../..';
 const DATA_DIR = SITE_ROOT . '/data';
@@ -43,7 +44,6 @@ function start_session(): void
 
 function send_security_headers(): void
 {
-    header('X-Robots-Tag: noindex, nofollow');
     header('X-Frame-Options: DENY');
     header('X-Content-Type-Options: nosniff');
     header('Referrer-Policy: same-origin');
@@ -100,14 +100,12 @@ function is_logged_in(): bool
 function require_login(): void
 {
     if (!is_logged_in()) {
-        header('Location: login.php');
-        exit;
+        redirect_to('login');
     }
     // expiration après 2 h d'inactivité
     if (!empty($_SESSION['last_seen']) && time() - $_SESSION['last_seen'] > 7200) {
         logout();
-        header('Location: login.php?expire=1');
-        exit;
+        redirect_to('login?expire=1');
     }
     $_SESSION['last_seen'] = time();
 }
@@ -239,17 +237,6 @@ function all_articles(): array
     return $list;
 }
 
-/** Une seule règle de publication pour la liste, les articles et le sitemap. */
-function published_articles(): array
-{
-    return array_values(array_filter(all_articles(), static function (array $article): bool {
-        $date = $article['date'] ?? '';
-        return ($article['statut'] ?? '') === 'publie'
-            && preg_match('/^\d{4}-\d{2}-\d{2}$/', $date)
-            && $date <= date('Y-m-d');
-    }));
-}
-
 function find_article(string $id): ?array
 {
     foreach (read_json('articles', []) as $a) if (($a['id'] ?? '') === $id) return $a;
@@ -275,7 +262,7 @@ function render_content(string $src): string
         $t = e($t);
         $t = preg_replace('/\*\*(.+?)\*\*/u', '<strong>$1</strong>', $t);
         $t = preg_replace('/(?<!\*)\*(?!\s)(.+?)(?<!\s)\*(?!\*)/u', '<em>$1</em>', $t);
-        $t = preg_replace_callback('/\[([^\]]+)\]\(((?:https?:\/\/|\/|mailto:|tel:|#|[A-Za-z0-9_-]+\.(?:html|php)\b)[^\s)]*)\)/u', function ($m) {
+        $t = preg_replace_callback('/\[([^\]]+)\]\(((?:https?:\/\/|\/|mailto:|tel:|#|[A-Za-z0-9][A-Za-z0-9\/_.-]*(?=[?#)]))[^\s)]*)\)/u', function ($m) {
             $ext = str_starts_with($m[2], 'http');
             return '<a class="m-link" href="' . $m[2] . '"' . ($ext ? ' target="_blank" rel="noopener"' : '') . '>' . $m[1] . '</a>';
         }, $t);
@@ -341,7 +328,7 @@ function all_prices(): array
 /** Pages statiques dont le titre et la description sont modifiables depuis l'admin. */
 function seo_pages(): array
 {
-    $pages = ['index.html' => 'Accueil', 'services.html' => 'Services d’impression', 'notre-imprimerie.html' => 'Notre atelier d’impression'];
+    $pages = ['index.html' => 'Accueil', 'services.html' => 'Services', 'notre-imprimerie.html' => 'Notre imprimerie'];
     foreach (SERVICES as [$label, $page]) $pages[$page] = $label;
     $pages['contact.html'] = 'Contact';
     $pages['devis.html'] = 'Devis';
@@ -383,4 +370,113 @@ function format_price(float $v): string
 {
     $dec = floor($v) == $v ? 0 : 2;
     return number_format($v, $dec, ',', ' ');
+}
+
+/* ---------- E-mail (SMTP via PHPMailer) ---------- */
+function smtp_settings(): array
+{
+    $s = read_json('smtp', []);
+    return [
+        'host'       => (string)($s['host'] ?? ''),
+        'port'       => (int)($s['port'] ?? 465),
+        'secure'     => in_array($s['secure'] ?? 'ssl', ['ssl', 'tls', 'none'], true) ? ($s['secure'] ?? 'ssl') : 'ssl',
+        'username'   => (string)($s['username'] ?? 'contact@alloprint.ma'),
+        'password'   => (string)($s['password'] ?? ''),
+        'from_email' => (string)($s['from_email'] ?? 'contact@alloprint.ma'),
+        'from_name'  => (string)($s['from_name'] ?? 'AlloPrint'),
+        'to_email'   => (string)($s['to_email'] ?? 'contact@alloprint.ma'),
+        'confirm'    => (bool)($s['confirm'] ?? true),
+    ];
+}
+
+function smtp_ready(): bool
+{
+    $s = smtp_settings();
+    return $s['host'] !== '' && $s['username'] !== '' && $s['password'] !== '';
+}
+
+/**
+ * Envoie un e-mail via SMTP. Lève RuntimeException avec un message lisible en cas d'échec.
+ * $to : adresse ou liste d'adresses séparées par des virgules.
+ */
+function send_mail(string $to, string $subject, string $html, string $text, ?array $replyTo = null): void
+{
+    require_once __DIR__ . '/vendor/phpmailer/Exception.php';
+    require_once __DIR__ . '/vendor/phpmailer/PHPMailer.php';
+    require_once __DIR__ . '/vendor/phpmailer/SMTP.php';
+    $s = smtp_settings();
+    if (!smtp_ready()) throw new RuntimeException('Le SMTP n’est pas encore configuré (Admin › Messagerie SMTP).');
+    $m = new \PHPMailer\PHPMailer\PHPMailer(true);
+    try {
+        $m->isSMTP();
+        $m->Host = $s['host'];
+        $m->Port = $s['port'];
+        $m->SMTPAuth = true;
+        $m->Username = $s['username'];
+        $m->Password = $s['password'];
+        if ($s['secure'] === 'ssl') $m->SMTPSecure = \PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_SMTPS;
+        elseif ($s['secure'] === 'tls') $m->SMTPSecure = \PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_STARTTLS;
+        else { $m->SMTPSecure = ''; $m->SMTPAutoTLS = false; }
+        $m->Timeout = 15;
+        $m->CharSet = 'UTF-8';
+        $m->setFrom($s['from_email'] ?: $s['username'], $s['from_name']);
+        foreach (array_filter(array_map('trim', explode(',', $to))) as $addr) $m->addAddress($addr);
+        if ($replyTo && filter_var($replyTo[0], FILTER_VALIDATE_EMAIL)) $m->addReplyTo($replyTo[0], $replyTo[1] ?? '');
+        $m->isHTML(true);
+        $m->Subject = $subject;
+        $m->Body = $html;
+        $m->AltBody = $text;
+        $m->send();
+    } catch (\PHPMailer\PHPMailer\Exception $ex) {
+        throw new RuntimeException('Envoi impossible : ' . $m->ErrorInfo);
+    }
+}
+
+/** Gabarit HTML simple aux couleurs du site pour les e-mails. */
+function mail_layout(string $title, string $bodyHtml): string
+{
+    return '<!doctype html><html lang="fr"><body style="margin:0;background:#f3f3fa;font-family:Arial,Helvetica,sans-serif;color:#06222a">'
+        . '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f3f3fa;padding:24px 0"><tr><td align="center">'
+        . '<table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#ffffff;border-radius:12px;overflow:hidden">'
+        . '<tr><td style="background:#00677a;padding:22px 28px;color:#ffffff;font-size:20px;font-weight:bold">AlloPrint <span style="color:#b9e533">·</span> ' . e($title) . '</td></tr>'
+        . '<tr><td style="padding:26px 28px;font-size:15px;line-height:1.6">' . $bodyHtml . '</td></tr>'
+        . '<tr><td style="padding:16px 28px;background:#f3f3fa;font-size:12px;color:#5b6b72">AlloPrint · 3, avenue 2 Mars, Résidence Marwa, 5e étage, Casablanca · 05 22 48 44 25</td></tr>'
+        . '</table></td></tr></table></body></html>';
+}
+
+/** Adresse absolue d'une page de l'admin (pour les liens envoyés par e-mail). */
+function admin_url(string $page): string
+{
+    return site_abs_url('admin/' . $page);
+}
+
+/**
+ * Chemin web de la racine du site (« / » en ligne, « /alloprint/site/ » en local par exemple),
+ * calculé à partir du script en cours : fonctionne aussi derrière les adresses propres (/login, /article/…).
+ */
+function site_base_path(): string
+{
+    static $base = null;
+    if ($base !== null) return $base;
+    $script = str_replace('\\', '/', (string)($_SERVER['SCRIPT_NAME'] ?? '/'));
+    $file = realpath((string)($_SERVER['SCRIPT_FILENAME'] ?? '')) ?: '';
+    $root = realpath(SITE_ROOT) ?: '';
+    $rel = ($file && $root && str_starts_with($file, $root)) ? str_replace('\\', '/', substr($file, strlen($root))) : '';
+    $base = ($rel !== '' && str_ends_with($script, $rel)) ? substr($script, 0, -strlen($rel)) : rtrim(dirname($script), '/');
+    $base = rtrim($base, '/') . '/';
+    return $base;
+}
+
+/** Adresse absolue (avec domaine) d'un chemin du site, ex. site_abs_url('login'). */
+function site_abs_url(string $path = ''): string
+{
+    $https = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off');
+    $host = preg_replace('/[^A-Za-z0-9.:-]/', '', $_SERVER['HTTP_HOST'] ?? 'alloprint.ma');
+    return ($https ? 'https' : 'http') . '://' . $host . site_base_path() . ltrim($path, '/');
+}
+
+function redirect_to(string $path): void
+{
+    header('Location: ' . site_base_path() . ltrim($path, '/'));
+    exit;
 }

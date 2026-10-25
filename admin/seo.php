@@ -17,8 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } catch (RuntimeException $ex) {
         flash('error', $ex->getMessage());
     }
-    header('Location: seo.php#' . rawurlencode($page));
-    exit;
+    redirect_to('admin/seo#' . rawurlencode($page));
 }
 
 admin_header('Référencement (SEO)', 'seo');

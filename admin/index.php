@@ -19,10 +19,10 @@ admin_header('Tableau de bord', 'dashboard');
 <div class="card">
   <h2>Actions rapides</h2>
   <div class="actions">
-    <a class="btn" href="article.php">+ Nouvel article</a>
-    <a class="btn btn--ghost" href="prix.php">Modifier les prix</a>
-    <a class="btn btn--ghost" href="seo.php">Titres et descriptions des pages</a>
-    <a class="btn btn--ghost" href="../articles.php" target="_blank" rel="noopener">Voir la page Articles ↗</a>
+    <a class="btn" href="article">+ Nouvel article</a>
+    <a class="btn btn--ghost" href="prix">Modifier les prix</a>
+    <a class="btn btn--ghost" href="seo">Titres et descriptions des pages</a>
+    <a class="btn btn--ghost" href="../articles" target="_blank" rel="noopener">Voir la page Articles ↗</a>
   </div>
 </div>
 <?php if ($articles): ?>
@@ -30,7 +30,7 @@ admin_header('Tableau de bord', 'dashboard');
   <h2>Derniers articles</h2>
   <ul>
     <?php foreach (array_slice($articles, 0, 5) as $a): ?>
-      <li><a href="article.php?id=<?= e($a['id']) ?>"><?= e($a['titre']) ?></a> — <?= ($a['statut'] ?? '') === 'publie' ? 'publié' : 'brouillon' ?>, <?= e(format_date_fr($a['date'] ?? '')) ?></li>
+      <li><a href="article?id=<?= e($a['id']) ?>"><?= e($a['titre']) ?></a> — <?= ($a['statut'] ?? '') === 'publie' ? 'publié' : 'brouillon' ?>, <?= e(format_date_fr($a['date'] ?? '')) ?></li>
     <?php endforeach; ?>
   </ul>
 </div>
