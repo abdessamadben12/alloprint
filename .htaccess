@@ -1,6 +1,7 @@
 # AlloPrint — Apache 2.4 (cPanel / XAMPP)
 # Adresses propres : /services, /contact, /devis, /articles, /article/mon-article, /login, /admin/…
 DirectoryIndex index.html index.php
+ErrorDocument 404 /404.php
 Options -Indexes -MultiViews
 AddDefaultCharset UTF-8
 AddType application/manifest+json .webmanifest
@@ -29,6 +30,29 @@ RewriteRule ^uploads/.*\.(?:php[0-9]?|phtml|phar|cgi|pl|py|sh|html?|svg)$ - [F,L
 
 # Sitemap
 RewriteRule ^sitemap\.xml$ sitemap.php [L]
+
+# Fichier de validation Google Search Console : servi tel quel, sans redirection
+RewriteRule ^google[0-9a-f]+\.html$ - [L]
+
+# --- Ancien site alloprint.ma (www, .html / .php) : 301 vers la page équivalente ---
+RewriteRule ^(?:index-2\.html|indexe?\.php|index-\.php)$ %{ENV:BASE} [R=301,L]
+RewriteRule ^(?:contacte?\.php|rappel\.php)$ %{ENV:BASE}contact [R=301,L]
+RewriteRule ^(?:demande-devis\.php|Devis\.php|devis111\.php)$ %{ENV:BASE}devis [R=301,L]
+RewriteRule ^(?:service\.html|services\.php)$ %{ENV:BASE}services [R=301,L]
+RewriteRule ^(?:presentation\.html|imprimerie\.html|references\.php|Copie\ de\ references\.php)$ %{ENV:BASE}notre-imprimerie [R=301,L]
+RewriteRule ^blog\.html$ %{ENV:BASE}articles [R=301,L]
+RewriteRule ^conception-graphique\.html$ %{ENV:BASE}design-graphique [R=301,L]
+RewriteRule ^(?:stand|agencement-magasins)\.html$ %{ENV:BASE}stands-exposition [R=301,L]
+RewriteRule ^palissades-de-chantier\.html$ %{ENV:BASE}palissade-chantier [R=301,L]
+RewriteRule ^impresson-grand-format\.html$ %{ENV:BASE}impression-grand-format [R=301,L]
+RewriteRule ^impression-numerique-vinyles\.html$ %{ENV:BASE}impression-vinyle [R=301,L]
+RewriteRule ^impression-numerique-baches\.(?:html|php)$ %{ENV:BASE}impression-bache [R=301,L]
+RewriteRule ^impression-numerique-(?:posters|pvc|toile|papier-peint|supports)\.html$ %{ENV:BASE}impression-grand-format [R=301,L]
+RewriteRule ^impression-numerique-tirage-plan\.html$ %{ENV:BASE}impression-numerique [R=301,L]
+RewriteRule ^impression-offset-autocollant\.html$ %{ENV:BASE}impression-vinyle [R=301,L]
+RewriteRule ^(?:impression-offset-(?:plv|plv-plastique|cadeau)|plv|publicite-par-objet|enseigne-publicitaire)\.html$ %{ENV:BASE}industrie-publicitaire [R=301,L]
+RewriteRule ^impression-offset(?:-[a-z_-]+)?\.html$ %{ENV:BASE}impression-numerique [R=301,L]
+RewriteRule ^(?:conception_et_impression_(?:carte_de_visite|flyers)\.html|impression_(?:carte_de_visite|depliant|flyers)\.php)$ %{ENV:BASE}impression-numerique [R=301,L]
 
 # --- Redirections 301 des anciennes adresses (GET) vers les adresses propres ---
 RewriteRule ^impression-lettrage(?:\.html)?$ %{ENV:BASE}impression-vitrine [R=301,L]

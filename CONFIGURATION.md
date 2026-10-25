@@ -34,7 +34,7 @@ Le routeur est nécessaire en développement : le serveur intégré PHP ne lit p
 
 ## Hébergement Apache / cPanel
 
-- Utiliser une version maintenue de **PHP 8.2 ou ultérieure**, avec `mbstring`, `json`, `session`, `fileinfo` et `xmlwriter`.
+- Utiliser une version maintenue de **PHP 8.2 ou ultérieure**, avec `mbstring`, `json`, `session` et `fileinfo`.
 - Copier **le contenu de `site/`**, fichiers cachés compris, dans la racine web du domaine. Ne pas y copier `public_html/` de ce projet ni les anciens gabarits.
 - Le domaine préparé est **`https://alloprint.ma`**. Il reprend celui des coordonnées existantes du site.
 - Activer PHP pour les fichiers `.php` via l’hébergeur. Les `.html` restent des fichiers statiques.
@@ -45,6 +45,25 @@ Le routeur est nécessaire en développement : le serveur intégré PHP ne lit p
 - Lors des mises à jour, conserver les données existantes dans `data/` et `uploads/articles/` : les écraser remplacerait vos articles, prix ou compte administrateur.
 
 `.user.ini` fixe les limites d’envoi et les réglages PHP sous CGI/FPM. Sous Apache avec `mod_php`, reporter ces valeurs dans le `php.ini` utilisé par le serveur. Le fuseau `Africa/Casablanca`, l’UTF-8 et les paramètres de session sont également initialisés dans `inc/config.php`. Le réglage du cookie sécurisé suit la connexion HTTPS reçue par PHP.
+
+## Mise en production (alloprint.ma)
+
+Le site en ligne se met à jour depuis le dépôt GitHub. Après chaque `git push` :
+
+1. cPanel › **Git Version Control** › dépôt alloprint › **Pull or Deploy** › **Update from Remote** (puis **Deploy HEAD Commit** si le dépôt n’est pas cloné directement dans `public_html`).
+2. Vérifier : `https://alloprint.ma/sitemap.xml` (XML, 22 adresses), `/login`, une ancienne adresse (`/stand.html` → `/stands-exposition`), une adresse inconnue (page « Page introuvable », code 404).
+3. Dossiers `data/` et `data/sessions/` accessibles en écriture par PHP (755 ou 775, jamais 777).
+
+Déjà réglé dans le code pour la production :
+
+- **Domaine canonique** `https://alloprint.ma` (HTTPS, sans `www`) : `inc/config.php` et `.htaccess`.
+- **Anciennes adresses** de l’ancien site (`stand.html`, `palissades-de-chantier.html`, `impression-offset-*.html`, `contact.php`, `demande-devis.php`…) : redirection 301 vers la page équivalente, pour garder le référencement acquis.
+- **Validation Google Search Console** : `googlea38880217857c20a.html` reste servi tel quel à la racine (ne pas le supprimer) et n’apparaît pas dans le sitemap.
+- **Page 404** aux couleurs du site (`404.php`, non indexée).
+- **Sitemap** sans dépendance à l’extension PHP XMLWriter.
+- **PHP** : erreurs masquées aux visiteurs et journalisées (`.user.ini`), sessions de l’admin dans `data/sessions/`.
+
+Données propres au serveur (non suivies par Git, voir `.gitignore`) : messages reçus, réglages SMTP, tentatives de connexion, sessions. Les réglages SMTP se saisissent dans Admin › Messagerie SMTP **sur le site en ligne**.
 
 ## URL de production et référencement
 

@@ -14,6 +14,7 @@ foreach (glob(__DIR__ . '/*.html') as $file) {
     $html = (string)file_get_contents($file);
     if (preg_match('~<meta\s+name="robots"\s+content="[^"]*noindex~i', $html) || str_contains($html, 'http-equiv="refresh"')) continue;
     $slug = basename($file, '.html');
+    if (preg_match('/^google[0-9a-f]+$/', $slug)) continue; // fichier de validation Search Console
     $urls[] = [
         'loc' => site_url($slug === 'index' ? '' : $slug),
         'lastmod' => date('Y-m-d', (int)filemtime($file)),
@@ -34,17 +35,12 @@ foreach ($articles as $article) {
 }
 $urls[] = array_filter(['loc' => site_url('articles'), 'lastmod' => $latest ?: null, 'priority' => '0.7']);
 
-$xml = new XMLWriter();
-$xml->openMemory();
-$xml->setIndent(true);
-$xml->startDocument('1.0', 'UTF-8');
-$xml->startElement('urlset');
-$xml->writeAttribute('xmlns', 'http://www.sitemaps.org/schemas/sitemap/0.9');
+$out = '<?xml version="1.0" encoding="UTF-8"?>' . "\n" . '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
 foreach ($urls as $entry) {
-    $xml->startElement('url');
-    foreach ($entry as $key => $value) $xml->writeElement($key, (string)$value);
-    $xml->endElement();
+    $out .= "  <url>\n";
+    foreach ($entry as $key => $value) {
+        $out .= '    <' . $key . '>' . htmlspecialchars((string)$value, ENT_XML1 | ENT_QUOTES, 'UTF-8') . '</' . $key . ">\n";
+    }
+    $out .= "  </url>\n";
 }
-$xml->endElement();
-$xml->endDocument();
-echo $xml->outputMemory();
+echo $out . "</urlset>\n";
