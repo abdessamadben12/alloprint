@@ -1,0 +1,764 @@
+<!doctype html>
+<!--
+  Free website template by 8B: https://8b.com/templates/dotdrum/
+  Source: https://github.com/8bsite/print-studio-website-template
+  MIT License (code) https://8b.com/ · Photos et visuels : voir CREDITS.md · Fonts: Google Fonts (OFL)
+  One HTML file, no build step. Notes for people and AI agents: README.md and AGENTS.md.
+-->
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Impression à Casablanca : vinyle, bâche, vitrine — AlloPrint</title>
+<meta name="description" content="Impression à Casablanca : palissade de chantier, vinyle, vitrine et bâche sur mesure. AlloPrint vous accompagne du fichier aux finitions. Devis gratuit.">
+<meta name="generator" content="8B Templates">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Impression à Casablanca : vinyle, bâche, vitrine — AlloPrint">
+<meta property="og:description" content="Impression à Casablanca : palissade de chantier, vinyle, vitrine et bâche sur mesure. AlloPrint vous accompagne du fichier aux finitions. Devis gratuit.">
+<link rel="icon" type="image/png" href="images/logo.png">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" href="https://fonts.gstatic.com/s/gabarito/v9/QGYtz_0dZAGKJJ4t3HtoW4U.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="https://fonts.gstatic.com/s/rethinksans/v7/AMOWz4SDuXOMCPfdoglY9JQEVFi3.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="css/alloprint.css">
+<style data-8b-part="section:press">
+@layer sections {
+  #press { position: relative; overflow: clip; background: var(--color-1); }
+  #press .press__s1 { min-height: min(100svh, 860px); padding-block: 100px 36px; grid-template-rows: auto minmax(300px, 1fr); row-gap: 28px; }
+  #press .press__title { grid-column: 1 / -1; color: var(--color-3); }
+  #press .press__line { display: block; width: fit-content; white-space: nowrap; font-size: min(210px, min(100vw - 2 * var(--space-1), 1200px) / (var(--len) * 0.45)); }
+  #press .press__line--big { color: var(--color-2); }
+  #press .press__line + .press__line { margin-top: 0.06em; }
+  #press .press__line--small { position: relative; font-weight: 700; letter-spacing: -0.02em; }
+  #press .press__char { display: inline-block; will-change: transform; }
+  #press .press__title.is-split .press__line { animation: none; }
+  #press .press__copy { grid-column: 1 / 6; align-self: end; display: grid; gap: 28px; padding-bottom: 6px; }
+  #press .press__copy .m-text-5 { max-width: 30ch; }
+  #press .press__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 28px; }
+  #press .press__art { grid-column: 7 / 13; align-self: stretch; min-height: 320px; border-radius: 4px; }
+  #press .press__art img { position: absolute; inset: 0; }
+  #press .press__s2 { position: relative; z-index: 1; padding-block: 24px var(--space-2); align-items: start; }
+  #press .press__panel { grid-column: 7 / 13; grid-row: 1; position: relative; isolation: isolate; display: flex; flex-direction: column; justify-content: space-between; gap: 40px; min-height: 420px; padding: 44px 36px 40px; color: var(--color-1); }
+  #press .press__bands { position: absolute; inset: 0; z-index: -1; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  #press .press__band { margin-right: -1px; background: var(--color-2); }
+  #press .press__band:last-child { margin-right: 0; }
+  #press .press__statement { font-size: clamp(36px, 4.3vw, 60px); }
+  #press .press__note { max-width: 36ch; color: var(--color-4); font-weight: 500; }
+  #press .press__more { grid-column: 1 / 6; grid-row: 1; display: grid; gap: 26px; padding-top: 4px; }
+  #press .press__photo { aspect-ratio: 3 / 2; }
+  #press .press__facts { display: grid; gap: 0; border-top: 1px solid color-mix(in srgb, var(--color-3) 35%, transparent); }
+  #press .press__facts li { padding: 12px 0; border-bottom: 1px solid color-mix(in srgb, var(--color-3) 35%, transparent); }
+  #press .press__more .m-link { justify-self: start; }
+  @media (prefers-reduced-motion: no-preference) {
+    #press .press__line { animation: press-rise 0.75s cubic-bezier(0.2, 0.7, 0.2, 1) backwards; }
+    #press .press__line + .press__line { animation-delay: 0.08s; }
+  }
+  @keyframes press-rise { from { transform: translateY(0.3em); clip-path: inset(-10% -2% 100% -2%); } to { transform: none; clip-path: inset(-10% -2% -12% -2%); } }
+  @keyframes press-print { from { clip-path: inset(0 0 100% 0); } to { clip-path: inset(0); } }
+  @keyframes press-print-up { from { clip-path: inset(100% 0 0 0); } to { clip-path: inset(0); } }
+  @keyframes press-drop { from { transform: translateY(-44px) scale(0.82); } to { transform: none; } }
+  @keyframes press-bob { from { transform: translateY(-17px); } to { transform: translateY(17px); } }
+  @media (max-width: 899px) {
+    #press .press__s1 { display: flex; flex-direction: column; min-height: 0; padding-block: 84px 28px; row-gap: 24px; }
+    #press .press__copy { gap: 22px; }
+    #press .press__art { flex: none; height: clamp(220px, 58vw, 360px); min-height: 0; }
+    #press .press__s2 { display: flex; flex-direction: column; gap: 32px; padding-block: 8px var(--space-2); }
+    #press .press__panel { min-height: 0; padding: 32px 22px 26px; gap: 28px; }
+    #press .press__statement { font-size: clamp(32px, 9vw, 44px); }
+  }
+}
+</style>
+<style data-8b-part="section:inks">
+@layer sections {
+  #inks { position: relative; overflow: clip; padding-block: var(--space-2); background: var(--color-3); color: var(--color-1); }
+  #inks .inks__grid { align-items: center; row-gap: 56px; }
+  #inks .inks__copy { grid-column: 1 / 6; display: grid; gap: 28px; }
+  #inks .inks__list { border-top: 1px solid color-mix(in srgb, var(--color-1) 30%, transparent); }
+  #inks .inks__list > div { display: grid; gap: 6px; padding: 18px 0; border-bottom: 1px solid color-mix(in srgb, var(--color-1) 30%, transparent); }
+  #inks .inks__visual { grid-column: 7 / 13; display: grid; gap: 14px; }
+  #inks .inks__visual img { width: 100%; height: auto; }
+  #inks .inks__caption { color: color-mix(in srgb, var(--color-1) 75%, transparent); }
+  @media (max-width: 899px) {
+    #inks .inks__copy, #inks .inks__visual { grid-column: 1 / -1; }
+  }
+}
+</style>
+<style data-8b-part="section:process">
+@layer sections {
+  #process { position: relative; background: var(--color-1); color: var(--color-3); }
+  #process .process__stage { padding-block: var(--space-2); }
+  #process .process__head { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 20px 48px; align-items: end; }
+  #process .process__body { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: 40px 64px; align-items: start; margin-top: 56px; }
+  #process .process__sheet { position: relative; max-width: 420px; aspect-ratio: 4 / 3; border-radius: 4px; box-shadow: 14px 14px 0 var(--color-2); }
+  #process .process__track { display: grid; border-top: 1px solid color-mix(in srgb, var(--color-3) 30%, transparent); }
+  #process .station { display: grid; grid-template-columns: 52px minmax(0, 1fr); gap: 6px 20px; padding: 22px 0; border-bottom: 1px solid color-mix(in srgb, var(--color-3) 30%, transparent); }
+  #process .station > :not(.station__no) { grid-column: 2; }
+  #process .station__no { grid-row: 1 / 4; display: grid; place-items: center; width: 44px; height: 44px; border-radius: var(--radius-1); background: var(--color-2); color: var(--color-4); font-family: var(--font-1); font-size: 20px; font-weight: 800; }
+  #process .station__time { margin-top: 6px; }
+  @media (max-width: 899px) {
+    #process .process__head, #process .process__body { grid-template-columns: minmax(0, 1fr); }
+    #process .process__body { margin-top: 40px; }
+    #process .process__sheet { width: 100%; max-width: 520px; box-shadow: 10px 10px 0 var(--color-2); }
+  }
+}
+</style>
+<style data-8b-part="scene-style:process-run">
+@layer scenes {
+  @media (prefers-reduced-motion: no-preference) {
+    #process[data-run] { height: var(--process-height, auto); }
+    #process[data-run] .process__stage { position: sticky; top: 0; height: 100svh; overflow: hidden; display: flex; flex-direction: column; padding-block: 104px 48px; }
+    #process[data-run] .process__body { flex: 1 1 auto; min-height: 0; align-items: center; }
+    #process[data-run] .process__sheet { width: min(380px, (100svh - 360px) * 1.333); }
+    #process[data-run] .process__window { overflow: hidden; margin-right: calc(-1 * var(--space-1)); }
+    #process[data-run] .process__track { display: flex; gap: 18px; width: max-content; border-top: 0; }
+    #process[data-run] .station { width: min(340px, 74vw); align-content: start; padding: 26px 24px; border: 1px solid color-mix(in srgb, var(--color-3) 30%, transparent); }
+    @media (max-width: 899px) {
+      #process[data-run] .process__stage { padding-block: 84px 28px; }
+      #process[data-run] .process__head { gap: 12px; }
+      #process[data-run] .process__body { margin-top: 20px; gap: 22px; align-items: start; align-content: start; }
+
+      #process[data-run] .station { padding: 20px 18px; }
+    }
+  }
+}
+</style>
+<style data-8b-part="section:studio">
+@layer sections {
+  #studio { padding-block: var(--space-2); background: var(--color-2); color: var(--color-4); }
+  #studio [data-8b-motion~="register"] { --register-ink: var(--color-1); }
+  #studio .studio__grid { row-gap: 56px; }
+  #studio .studio__copy { grid-column: 1 / 6; display: grid; gap: 28px; align-content: start; }
+  #studio .studio__kit { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 28px; margin-top: 8px; }
+  #studio .studio__kit > div { display: grid; gap: 6px; padding-top: 14px; border-top: 2px solid var(--color-4); }
+  #studio .studio__photos { grid-column: 7 / 13; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; align-items: start; }
+  #studio .studio__photo { aspect-ratio: 3 / 4; }
+  #studio .studio__photo--wide { grid-column: 1 / -1; aspect-ratio: 16 / 10; }
+  #studio .studio__photo--low { margin-top: 96px; }
+  @media (max-width: 899px) {
+    #studio .studio__copy, #studio .studio__photos { grid-column: 1 / -1; }
+    #studio .studio__kit { grid-template-columns: minmax(0, 1fr); }
+    #studio .studio__photos { gap: 14px; }
+    #studio .studio__photo--low { margin-top: 56px; }
+  }
+}
+</style>
+<style data-8b-part="section:editions">
+@layer sections {
+  #editions { position: relative; overflow: clip; padding-block: var(--space-2); background: var(--color-1); color: var(--color-3); }
+  #editions .editions__head { align-items: end; row-gap: 20px; }
+  #editions .editions__head .m-text-2 { grid-column: 1 / 8; }
+  #editions .editions__head .m-text-5 { grid-column: 8 / 13; }
+  #editions .editions__rack { --rack-offset: 150px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0 24px; align-items: start; margin-top: 64px; }
+  #editions .editions__lane { display: grid; gap: 44px; }
+  #editions .editions__trail { --trail-cols: 28; height: var(--rack-offset); margin-bottom: -44px; }
+  #editions .editions__lane--high .editions__trail { margin: -44px 0 0; scale: 1 -1; }
+  #editions .edition { display: grid; gap: 10px; }
+  #editions .edition__photo { aspect-ratio: 3 / 4; margin-bottom: 6px; }
+  #editions .edition__buy { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; }
+  #editions .edition__price { font-family: var(--font-1); font-size: 24px; font-weight: 800; }
+  @media (max-width: 899px) {
+    #editions .editions__head .m-text-2, #editions .editions__head .m-text-5 { grid-column: 1 / -1; }
+    #editions .editions__rack { --rack-offset: 96px; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 16px; margin-top: 44px; }
+    #editions .editions__lane { gap: 32px; }
+    #editions .editions__trail { margin-bottom: -32px; --trail-cols: 24; }
+    #editions .editions__lane--high .editions__trail { margin-top: -32px; }
+    #editions .editions__lane:nth-child(n + 3) { margin-top: 32px; }
+    #editions .edition__buy { flex-wrap: wrap; }
+  }
+}
+</style>
+<style data-8b-part="section:workshops">
+@layer sections {
+  #workshops { padding-block: var(--space-2); background: var(--color-3); color: var(--color-1); }
+  #workshops .workshops__grid { row-gap: 56px; }
+  #workshops .workshops__head { grid-column: 1 / 6; display: grid; gap: 28px; align-content: start; }
+  #workshops .workshops__photo { aspect-ratio: 4 / 3; margin-top: 12px; }
+  #workshops .workshops__sheet { grid-column: 7 / 13; display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 0 28px; }
+  #workshops .workshops__lane { position: relative; overflow: clip; }
+  #workshops .workshops__carriage { position: absolute; inset: auto 0 0; }
+  #workshops .workshops__trail { --trail-cols: 4; position: absolute; inset: auto 0 50%; height: 440px; }
+  #workshops .workshops__drum { position: relative; width: 100%; }
+  #workshops .workshops__list { border-top: 1px solid color-mix(in srgb, var(--color-1) 30%, transparent); }
+  #workshops .session { display: grid; grid-template-columns: 116px minmax(0, 1fr); gap: 8px 20px; padding: 24px 0; border-bottom: 1px solid color-mix(in srgb, var(--color-1) 30%, transparent); }
+  #workshops .session > :not(.session__date) { grid-column: 2; }
+  #workshops .session__date { grid-row: 1 / 5; align-self: start; justify-self: start; padding: 9px 14px; border: 2px solid var(--color-2); border-radius: var(--radius-1); background: var(--color-2); color: var(--color-4); font-size: 14px; font-weight: 700; line-height: 1; white-space: nowrap; transition: background-color 0.35s, color 0.35s, border-color 0.35s; }
+  #workshops .session__text { color: var(--color-4); }
+  #workshops .session__book { justify-self: start; margin-top: 4px; }
+  @media (max-width: 899px) {
+    #workshops .workshops__head, #workshops .workshops__sheet { grid-column: 1 / -1; }
+    #workshops .workshops__sheet { grid-template-columns: 26px minmax(0, 1fr); gap: 0 16px; }
+    #workshops .workshops__trail { --trail-cols: 3; height: 340px; }
+    #workshops .session { grid-template-columns: minmax(0, 1fr); }
+    #workshops .session > :not(.session__date) { grid-column: 1; }
+    #workshops .session__date { grid-row: auto; margin-bottom: 4px; }
+  }
+}
+</style>
+<style data-8b-part="scene-style:workshops-index">
+@layer scenes {
+  @media (prefers-reduced-motion: no-preference) {
+    #workshops .session[data-waiting] .session__date { border-color: var(--color-1); background: transparent; color: var(--color-1); }
+  }
+}
+</style>
+<style data-8b-part="section:faq">
+@layer sections {
+  #faq { padding-block: var(--space-2); background: var(--color-2); color: var(--color-4); }
+  #faq [data-8b-motion~="register"] { --register-ink: var(--color-1); }
+  #faq :focus-visible { outline-color: var(--color-4); }
+  #faq .faq__grid { row-gap: 40px; align-items: start; }
+  #faq .faq__grid > .m-text-2 { grid-column: 1 / 6; }
+  #faq .faq__list { grid-column: 7 / 13; border-top: 2px solid var(--color-4); }
+  #faq .faq__item { border-bottom: 1px solid color-mix(in srgb, var(--color-4) 40%, transparent); }
+  #faq summary { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 20px 0; cursor: pointer; list-style: none; }
+  #faq summary::-webkit-details-marker { display: none; }
+  #faq .faq__answer { max-width: 56ch; padding: 0 64px 24px 0; }
+  @media (max-width: 899px) {
+    #faq .faq__grid > .m-text-2, #faq .faq__list { grid-column: 1 / -1; }
+    #faq .faq__answer { padding-right: 0; }
+  }
+}
+</style>
+
+<!-- seo-config:start -->
+<link rel="canonical" href="https://alloprint.ma/index.html">
+<meta property="og:url" content="https://alloprint.ma/index.html">
+<meta property="og:site_name" content="AlloPrint">
+<meta property="og:locale" content="fr_MA">
+<meta property="og:image" content="https://alloprint.ma/images/photos/notre-imprimerie.webp">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://alloprint.ma/index.html#webpage","url":"https://alloprint.ma/index.html","name":"Impression à Casablanca.","inLanguage":"fr-MA","isPartOf":{"@id":"https://alloprint.ma/#website"}},{"@type":"WebSite","@id":"https://alloprint.ma/#website","url":"https://alloprint.ma/index.html","name":"AlloPrint","inLanguage":"fr-MA","publisher":{"@id":"https://alloprint.ma/#organization"}},{"@type":"LocalBusiness","@id":"https://alloprint.ma/#organization","name":"AlloPrint","url":"https://alloprint.ma/index.html","logo":"https://alloprint.ma/images/logo.png","image":"https://alloprint.ma/images/photos/notre-imprimerie.webp","telephone":"+212522484425","email":"contact@alloprint.ma","address":{"@type":"PostalAddress","streetAddress":"3, avenue 2 Mars, Résidence Marwa, 5e étage","addressLocality":"Casablanca","addressCountry":"MA"}}]}</script>
+<!-- seo-config:end -->
+</head>
+<body class="m-text">
+<!-- navigation: top bar: wordmark, section links, Devis button; phone menu overlay -->
+<header id="nav" class="nav" data-8b-section="navigation">
+  <a class="nav__skip" href="#main">Aller au contenu</a>
+  <div class="nav__shell">
+    <div class="nav__bar wrap">
+      <a class="nav__brand" href="#press" title="Retour en haut"><img class="nav__logo" src="images/logo.png" alt="AlloPrint" width="160" height="128"></a>
+      <nav class="nav__links" aria-label="Principal">
+        <a class="m-link" href="services.html">Services</a>
+        <a class="m-link" href="#editions">Réalisations</a>
+        <a class="m-link" href="notre-imprimerie.html">L’atelier</a>
+        <a class="m-link" href="articles.php">Articles</a>
+        <a class="m-link" href="contact.html">Contact</a>
+      </nav>
+      <a class="m-btn nav__cta" href="devis.html"><span class="m-btn__label">Demander un devis</span></a>
+      <button class="m-icon-btn nav__toggle" type="button" aria-expanded="false" aria-controls="menu"><span class="burger" aria-hidden="true"><i></i><i></i><i></i></span><span class="m-icon-btn__name">Ouvrir le menu</span></button>
+    </div>
+  </div>
+  <div id="menu" class="nav__menu" data-lenis-prevent hidden>
+    <div class="nav__menu-top">
+      <img class="nav__logo" src="images/logo.png" alt="AlloPrint" width="160" height="128">
+      <button class="m-icon-btn nav__close" type="button"><span class="xmark" aria-hidden="true"></span><span class="m-icon-btn__name">Fermer le menu</span></button>
+    </div>
+    <nav class="nav__menu-links" aria-label="Menu">
+      <a href="#press" aria-current="page"><span>Accueil</span><span class="nav__arrow" aria-hidden="true">→</span></a>
+      <a href="services.html"><span>Services</span><span class="nav__arrow" aria-hidden="true">→</span></a>
+      <a href="#editions"><span>Réalisations</span><span class="nav__arrow" aria-hidden="true">→</span></a>
+      <a href="notre-imprimerie.html"><span>L’atelier</span><span class="nav__arrow" aria-hidden="true">→</span></a>
+      <a href="articles.php"><span>Articles</span><span class="nav__arrow" aria-hidden="true">→</span></a>
+      <a href="contact.html"><span>Contact</span><span class="nav__arrow" aria-hidden="true">→</span></a>
+    </nav>
+    <div class="nav__menu-extra">
+      <a class="m-btn nav__menu-cta" href="devis.html"><span class="m-btn__label">Demander un devis gratuit</span></a>
+      <div class="nav__quick">
+        <a href="tel:+212522484425"><img src="images/icons/telephone.svg" alt="" aria-hidden="true" width="28" height="28">Appeler</a>
+        <a href="https://wa.me/212668746386" target="_blank" rel="noopener"><img src="images/icons/whatsapp.svg" alt="" aria-hidden="true" width="28" height="28">WhatsApp</a>
+      </div>
+      <p class="nav__menu-addr">3, avenue 2 Mars, Résidence Marwa, 5e étage, Casablanca<br><a href="mailto:contact@alloprint.ma">contact@alloprint.ma</a></p>
+    </div>
+  </div>
+</header>
+<main id="main">
+<!-- opening: big two-line headline with a workshop photo, then a green panel with the statement, a photo and three facts -->
+<section id="press" class="press" data-8b-section="opening" aria-labelledby="press-title">
+  <div class="press__s1 wrap grid">
+    <h1 id="press-title" class="press__title m-text-3">
+      <span class="press__line press__line--big" style="--len:10">Impression</span>
+      <span class="press__line press__line--small" style="--len:13">à Casablanca.</span>
+    </h1>
+    <div class="press__copy">
+      <p class="m-text-5">AlloPrint réalise votre impression de palissade de chantier, sur vinyle, de vitrine et sur bâche à Casablanca. Du choix du support aux finitions, préparons des visuels adaptés à votre projet.</p>
+      <nav class="service-links" aria-label="Services d’impression prioritaires"><a class="m-link" href="palissade-chantier.html">Impression palissade de chantier</a>
+<a class="m-link" href="impression-vinyle.html">Impression sur vinyle</a>
+<a class="m-link" href="impression-vitrine.html">Impression de vitrine</a>
+<a class="m-link" href="impression-bache.html">Impression sur bâche</a></nav>
+      <div class="press__actions">
+        <a class="m-btn" href="devis.html"><span class="m-btn__label">Demander un devis</span></a>
+        <a class="m-link" href="#editions">Voir nos réalisations</a>
+      </div>
+    </div>
+    <figure class="press__art m-photo"><img src="images/photos/notre-imprimerie.webp" srcset="images/photos/notre-imprimerie-640.webp 640w, images/photos/notre-imprimerie.webp 1536w" sizes="(max-width: 899px) calc(100vw - 32px), 50vw" alt="Atelier AlloPrint : un technicien massicote une affiche, un autre contrôle un tirage grand format" width="1536" height="1020" fetchpriority="high" decoding="async"></figure>
+  </div>
+  <div class="press__s2 wrap grid">
+    <div class="press__panel">
+      <div class="press__bands" aria-hidden="true"><span class="press__band"></span><span class="press__band"></span><span class="press__band"></span><span class="press__band"></span></div>
+      <h2 class="press__statement m-text-2">Petits et grands formats. Toutes quantités.</h2>
+      <p class="press__note">Le savoir-faire de nos pressiers et la qualité de nos équipements permettent de produire des travaux de qualité supérieure, de la carte de visite à la bâche géante.</p>
+    </div>
+    <div class="press__more">
+      <figure class="press__photo m-photo" data-8b-motion="screen"><img style="background:#e0e0e0" src="images/photos/impression-numerique.webp" srcset="images/photos/impression-numerique-640.webp 640w, images/photos/impression-numerique.webp 1536w" sizes="(max-width: 899px) calc(100vw - 32px), 500px" alt="Cartes de visite, dépliant et enveloppes aux motifs bleu pétrole et vert anis" width="1536" height="1024" loading="lazy" decoding="async"></figure>
+      <p>Cumulant plus de 6 années d’expérience, AlloPrint s’est construit une réputation solide en proposant des services à la hauteur de vos attentes et de vos exigences.</p>
+      <ul class="press__facts">
+        <li>Bâches, vinyles et palissades de chantier</li>
+        <li>Impression numérique, petit et grand format</li>
+        <li>Avenue 2 Mars, Résidence Marwa, Casablanca</li>
+      </ul>
+      <a class="m-link" href="#process">Comment se passe un projet</a>
+    </div>
+  </div>
+</section>
+<!-- inks: supports: copy and three-item list beside a composed image of grand format, vinyl and digital print -->
+<section id="inks" class="inks" data-8b-section="inks" aria-labelledby="inks-title">
+  <div class="wrap grid inks__grid">
+    <div class="inks__copy">
+      <h2 id="inks-title" class="m-text-2" data-8b-motion="register">Tous vos supports, en couleur.</h2>
+      <p class="m-text-5">Nous imprimons tous vos documents sur une multitude de supports, de la simple feuille au carton, du papier au PVC.</p>
+      <dl class="inks__list">
+        <div><dt class="m-text-6">Vinyle et lettrage</dt><dd>Stickers, vitrines, décors muraux, textes et logos découpés pour vos surfaces.</dd></div>
+        <div><dt class="m-text-6">Impression numérique</dt><dd>Idéale pour les volumes moindres ou urgents, avec des documents personnalisés à l’unité.</dd></div>
+        <div><dt class="m-text-6">Grand format</dt><dd>Bâches, kakémonos, vitrophanie, vinyle adhésif, toiles et posters pour l’intérieur comme l’extérieur.</dd></div>
+      </dl>
+    </div>
+    <figure class="inks__visual" data-8b-motion="screen">
+      <img src="images/photos/supports-couleur.webp" srcset="images/photos/supports-couleur-640.webp 640w, images/photos/supports-couleur.webp 1200w" sizes="(max-width: 899px) calc(100vw - 32px), 560px" alt="Traceur grand format, rouleaux de vinyle adhésif et papeterie imprimée aux couleurs bleu pétrole et vert anis" width="1200" height="1200" loading="lazy" decoding="async">
+      <figcaption class="inks__caption m-text-4">Grand format, vinyle et numérique · visuels d’illustration</figcaption>
+    </figure>
+  </div>
+</section>
+<!-- process: how it works: five numbered steps on a horizontal track beside a real photo (animation: scene:process-run, desktop only) -->
+<section id="process" class="process" data-8b-section="process" aria-labelledby="process-title">
+  <div class="process__stage">
+    <div class="wrap process__head">
+      <h2 id="process-title" class="m-text-2" data-8b-motion="register">Du fichier au produit fini.</h2>
+      <p class="m-text-5">Nous vous accompagnons de la conception à la réalisation, avec rigueur et professionnalisme.</p>
+    </div>
+    <div class="wrap process__body">
+      <figure class="process__sheet m-photo"><img src="images/controle-couleur.jpg" alt="Contrôle des couleurs d’une épreuve à la loupe sur un nuancier d’impression" width="415" height="312" loading="lazy" decoding="async"></figure>
+      <div class="process__window">
+        <ol class="process__track">
+          <li class="station">
+            <span class="station__no">1</span>
+            <h3 class="m-text-6"><img class="m-picto" src="images/icons/devis.svg" width="32" height="32" alt="" aria-hidden="true">Devis</h3>
+            <p>Décrivez votre projet en ligne ou par téléphone. Demandez des échantillons de papier avec votre devis.</p>
+            <p class="station__time m-text-4">Vous · devis gratuit</p>
+          </li>
+          <li class="station">
+            <span class="station__no">2</span>
+            <h3 class="m-text-6"><img class="m-picto" src="images/icons/design-graphique.svg" width="32" height="32" alt="" aria-hidden="true">Conception</h3>
+            <p>Nos graphistes créent ou adaptent vos supports : logotype, mise en page, charte graphique.</p>
+            <p class="station__time m-text-4">Atelier graphique</p>
+          </li>
+          <li class="station">
+            <span class="station__no">3</span>
+            <h3 class="m-text-6"><img class="m-picto" src="images/icons/validation.svg" width="32" height="32" alt="" aria-hidden="true">Validation</h3>
+            <p>Vous relisez et validez la maquette finale. Rien ne part en impression sans votre accord.</p>
+            <p class="station__time m-text-4">Vous · bon à tirer</p>
+          </li>
+          <li class="station">
+            <span class="station__no">4</span>
+            <h3 class="m-text-6"><img class="m-picto" src="images/icons/impression-numerique.svg" width="32" height="32" alt="" aria-hidden="true">Impression</h3>
+            <p>Numérique pour les courts tirages, grand format, bâche et vinyle pour l’affichage.</p>
+            <p class="station__time m-text-4">Nos pressiers · en atelier</p>
+          </li>
+          <li class="station">
+            <span class="station__no">5</span>
+            <h3 class="m-text-6"><img class="m-picto" src="images/icons/finitions.svg" width="32" height="32" alt="" aria-hidden="true">Finitions</h3>
+            <p>Façonnage et finitions pour des produits élégants et professionnels que vous serez fier de montrer.</p>
+            <p class="station__time m-text-4">Prêt à livrer</p>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- studio: about the print shop: paragraph, four document families, three photos at alternating heights -->
+<section id="studio" class="studio" data-8b-section="studio" aria-labelledby="studio-title">
+  <div class="wrap grid studio__grid">
+    <div class="studio__copy">
+      <h2 id="studio-title" class="m-text-2" data-8b-motion="register">Notre atelier d’impression.</h2>
+      <p class="m-text-5">Des petites aux grandes quantités, AlloPrint vous conseille pour que vous fassiez les meilleurs choix d’imprimés possibles, quelle que soit leur nature.</p>
+      <dl class="studio__kit">
+        <div><dt class="m-text-6">Administratif</dt><dd>Papiers à en-tête, enveloppes, chemises à rabats, carnets autocopiants.</dd></div>
+        <div><dt class="m-text-6">Commercial</dt><dd>Cartes de visite, flyers, dépliants, brochures, calendriers.</dd></div>
+        <div><dt class="m-text-6">Familial</dt><dd>Faire-part, menus, invitations, remerciements.</dd></div>
+        <div><dt class="m-text-6">Signalétique</dt><dd>Étiquettes, adhésifs, panneaux, plaques à tampons.</dd></div>
+      </dl>
+    </div>
+    <div class="studio__photos">
+      <figure class="m-photo studio__photo studio__photo--wide" data-8b-motion="screen"><img style="background:#e0e0e0" src="images/photos/impression-grand-format.webp" srcset="images/photos/impression-grand-format-640.webp 640w, images/photos/impression-grand-format.webp 1536w" sizes="(max-width: 899px) calc(100vw - 32px), 600px" alt="Traceur grand format imprimant une affiche géométrique bleu pétrole et vert anis" width="1536" height="1024" loading="lazy" decoding="async"></figure>
+      <figure class="m-photo studio__photo" data-8b-motion="screen"><img style="background:#f0f0f0" src="images/photos/impression-numerique.webp" srcset="images/photos/impression-numerique-640.webp 640w, images/photos/impression-numerique.webp 1536w" sizes="(max-width: 899px) 44vw, 280px" alt="Détail d’une papeterie imprimée avec cartes de visite et enveloppes assorties" width="1536" height="1024" loading="lazy" decoding="async"></figure>
+      <figure class="m-photo studio__photo studio__photo--low" data-8b-motion="screen"><img style="background:#f0f0f0" src="images/photos/design-graphique.webp" srcset="images/photos/design-graphique-640.webp 640w, images/photos/design-graphique.webp 1536w" sizes="(max-width: 899px) 44vw, 280px" alt="Maquette graphique à l’écran et épreuves imprimées sur un bureau de création" width="1536" height="1024" loading="lazy" decoding="async"></figure>
+      <p class="studio__caption">Visuels d’illustration de nos métiers. <a class="m-link" href="notre-imprimerie.html">Découvrir notre atelier d’impression ↗</a></p>
+    </div>
+  </div>
+</section>
+<!-- editions: portfolio: eight projects in four staggered lanes, each with photo, client, type and a quote link (animation: scene:editions-pistons) -->
+<section id="editions" class="editions" data-8b-section="editions" aria-labelledby="editions-title">
+  <div class="wrap grid editions__head">
+    <h2 id="editions-title" class="m-text-2" data-8b-motion="register">Nos réalisations.</h2>
+    <p class="m-text-5">Stands, enseignes, affichage et habillage de véhicules : quelques projets réalisés pour nos clients.</p>
+  </div>
+  <div class="wrap editions__rack">
+    <div class="editions__lane editions__lane--low">
+      <div class="editions__trail m-trail" aria-hidden="true"></div>
+      <article class="edition">
+        <figure class="m-photo edition__photo"><img style="background:#8a2a2a" src="images/realisations/stand-laticrete.jpg" alt="Stand d’exposition Laticrete avec écrans et comptoirs" width="720" height="805" loading="lazy"></figure>
+        <h3 class="m-text-6">Laticrete</h3>
+        <p class="edition__meta m-text-4">Stand · Salon Big Five</p>
+        <p class="edition__buy"><a class="m-link" href="mailto:contact@alloprint.ma?subject=Projet%20similaire%3A%20stand">Un projet similaire ?</a></p>
+      </article>
+      <article class="edition">
+        <figure class="m-photo edition__photo"><img style="background:#2a3a8a" src="images/realisations/stand-skov.jpg" alt="Stand d’exposition Skov bleu et blanc" width="720" height="805" loading="lazy"></figure>
+        <h3 class="m-text-6">Skov</h3>
+        <p class="edition__meta m-text-4">Stand d’exposition</p>
+        <p class="edition__buy"><a class="m-link" href="mailto:contact@alloprint.ma?subject=Projet%20similaire%3A%20stand">Un projet similaire ?</a></p>
+      </article>
+    </div>
+    <div class="editions__lane editions__lane--high">
+      <article class="edition">
+        <figure class="m-photo edition__photo"><img style="background:#3a5a4a" src="images/realisations/stand-iturri.jpg" alt="Stand Iturri en cours d’installation puis terminé" width="720" height="805" loading="lazy"></figure>
+        <h3 class="m-text-6">Iturri</h3>
+        <p class="edition__meta m-text-4">Stand d’exposition</p>
+        <p class="edition__buy"><a class="m-link" href="mailto:contact@alloprint.ma?subject=Projet%20similaire%3A%20stand">Un projet similaire ?</a></p>
+      </article>
+      <article class="edition">
+        <figure class="m-photo edition__photo"><img style="background:#4a2a6a" src="images/realisations/stand-afit.jpg" alt="Stand AFIT éclairé avec présentoirs muraux" width="720" height="805" loading="lazy"></figure>
+        <h3 class="m-text-6">AFIT</h3>
+        <p class="edition__meta m-text-4">Stand · Salon SIEMA</p>
+        <p class="edition__buy"><a class="m-link" href="mailto:contact@alloprint.ma?subject=Projet%20similaire%3A%20stand">Un projet similaire ?</a></p>
+      </article>
+      <div class="editions__trail m-trail" aria-hidden="true"></div>
+    </div>
+    <div class="editions__lane editions__lane--low">
+      <div class="editions__trail m-trail" aria-hidden="true"></div>
+      <article class="edition">
+        <figure class="m-photo edition__photo"><img style="background:#2a2a2a" src="images/realisations/affiche-dynotab.jpg" alt="Panneau d’affichage 4×3 Dyno-Tab au bord d’une route" width="720" height="805" loading="lazy"></figure>
+        <h3 class="m-text-6">Dyno-Tab</h3>
+        <p class="edition__meta m-text-4">Conception · affiche 4×3</p>
+        <p class="edition__buy"><a class="m-link" href="mailto:contact@alloprint.ma?subject=Projet%20similaire%3A%20affichage">Un projet similaire ?</a></p>
+      </article>
+      <article class="edition">
+        <figure class="m-photo edition__photo"><img style="background:#1a3a6a" src="images/realisations/enseigne-ixina.jpg" alt="Façade de magasin Ixina avec enseigne lumineuse" width="720" height="805" loading="lazy"></figure>
+        <h3 class="m-text-6">Ixina</h3>
+        <p class="edition__meta m-text-4">Enseigne publicitaire</p>
+        <p class="edition__buy"><a class="m-link" href="mailto:contact@alloprint.ma?subject=Projet%20similaire%3A%20enseigne">Un projet similaire ?</a></p>
+      </article>
+    </div>
+    <div class="editions__lane editions__lane--high">
+      <article class="edition">
+        <figure class="m-photo edition__photo"><img style="background:#8a6a4a" src="images/realisations/habillage-vehicule-adoha.jpg" alt="Voitures habillées aux couleurs d’Adoha devant un bureau de vente" width="720" height="805" loading="lazy"></figure>
+        <h3 class="m-text-6">Adoha</h3>
+        <p class="edition__meta m-text-4">Habillage de véhicules</p>
+        <p class="edition__buy"><a class="m-link" href="mailto:contact@alloprint.ma?subject=Projet%20similaire%3A%20habillage%20de%20v%C3%A9hicules">Un projet similaire ?</a></p>
+      </article>
+      <article class="edition">
+        <figure class="m-photo edition__photo"><img style="background:#4a4a3a" src="images/realisations/enseigne-kaidal.jpg" alt="Grandes lettres en bois de l’enseigne Kaidal installées dans un jardin" width="720" height="805" loading="lazy"></figure>
+        <h3 class="m-text-6">Kaidal</h3>
+        <p class="edition__meta m-text-4">Design · enseigne</p>
+        <p class="edition__buy"><a class="m-link" href="mailto:contact@alloprint.ma?subject=Projet%20similaire%3A%20enseigne">Un projet similaire ?</a></p>
+      </article>
+      <div class="editions__trail m-trail" aria-hidden="true"></div>
+    </div>
+  </div>
+</section>
+<!-- workshops: services list: nine services with a short tag, description, examples and a quote link, beside a lane where a drum inks each row (animation: scene:workshops-index) -->
+<section id="workshops" class="workshops" data-8b-section="workshops" aria-labelledby="workshops-title">
+  <div class="wrap grid workshops__grid">
+    <div class="workshops__head">
+      <h2 id="workshops-title" class="m-text-2" data-8b-motion="register">Nos services d’impression.</h2>
+      <p class="m-text-5">De votre enseigne commerciale aux impressions grand format, un service de conseil et de création publicitaire adapté à chaque budget.</p>
+      <a class="m-link" href="services.html">Tous les services ↗</a>
+      <figure class="m-photo workshops__photo" data-8b-motion="screen"><img style="background:#f0f0f0" src="images/photos/industrie-publicitaire.webp" srcset="images/photos/industrie-publicitaire-640.webp 640w, images/photos/industrie-publicitaire.webp 1536w" sizes="(max-width: 899px) calc(100vw - 32px), 500px" alt="Stand publicitaire avec comptoir, fond imprimé, roll-up et présentoir à brochures" width="1536" height="1024" loading="lazy" decoding="async"></figure>
+    </div>
+    <div class="workshops__sheet">
+      <div class="workshops__lane" aria-hidden="true"><div class="workshops__carriage"><div class="workshops__trail m-trail"></div><span class="workshops__drum m-disc"></span></div></div>
+      <ol class="workshops__list">
+<li class="session">
+          <p class="session__date">Chantier</p>
+          <h3 class="m-text-6"><img class="icon3d icon3d--list" src="images/icons-3d/palissade-chantier.webp" width="46" height="46" alt="" aria-hidden="true" loading="lazy">Impression palissade de chantier</h3>
+          <p class="session__text">Panneaux de chantier, bâches et habillage de palissade sur mesure.</p>
+          <p class="session__meta m-text-4">Habillage de palissade de chantier · Bâches et panneaux de chantier imprimés · Panneaux de présentation du projet</p>
+          <a class="m-link session__book" href="palissade-chantier.html">Découvrir ce service ↗</a>
+        </li>
+<li class="session">
+          <p class="session__date">Vinyle</p>
+          <h3 class="m-text-6"><img class="icon3d icon3d--list" src="images/icons-3d/impression-vinyle.webp" width="46" height="46" alt="" aria-hidden="true" loading="lazy">Impression sur vinyle</h3>
+          <p class="session__text">Stickers, vitrines, décors muraux et signalétique, en finition mate, brillante ou pelliculée.</p>
+          <p class="session__meta m-text-4">Stickers et étiquettes adhésives · Décor de vitrine ou mural · Vinyle imprimé pour signalétique</p>
+          <a class="m-link session__book" href="impression-vinyle.html">Découvrir ce service ↗</a>
+        </li>
+<li class="session">
+          <p class="session__date">Vitrine</p>
+          <h3 class="m-text-6"><img class="m-picto" src="images/icons/impression-vitrine.svg" width="32" height="32" alt="" aria-hidden="true">Impression de vitrine</h3>
+          <p class="session__text">Vitrophanie, adhésifs imprimés, microperforé, dépoli et lettrage pour vos vitrines.</p>
+          <p class="session__meta m-text-4">Vitrophanie couleur · Vinyle microperforé · Film dépoli et lettrage</p>
+          <a class="m-link session__book" href="impression-vitrine.html">Découvrir ce service ↗</a>
+        </li>
+<li class="session">
+          <p class="session__date">Bâche</p>
+          <h3 class="m-text-6"><img class="icon3d icon3d--list" src="images/icons-3d/impression-bache.webp" width="46" height="46" alt="" aria-hidden="true" loading="lazy">Impression sur bâche</h3>
+          <p class="session__text">Pour façades, événements et chantiers, avec œillets et renforts.</p>
+          <p class="session__meta m-text-4">Bâches événementielles · Bannières publicitaires · Habillage de façades et palissades de chantier</p>
+          <a class="m-link session__book" href="impression-bache.html">Découvrir ce service ↗</a>
+        </li>
+<li class="session">
+          <p class="session__date">Numérique</p>
+          <h3 class="m-text-6"><img class="icon3d icon3d--list" src="images/icons-3d/impression-numerique.webp" width="46" height="46" alt="" aria-hidden="true" loading="lazy">Impression numérique</h3>
+          <p class="session__text">Cartes de visite, flyers, invitations et petites brochures, en petites séries.</p>
+          <p class="session__meta m-text-4">Cartes de visite · Flyers et invitations · Documents et petites brochures</p>
+          <a class="m-link session__book" href="impression-numerique.html">Découvrir ce service ↗</a>
+        </li>
+<li class="session">
+          <p class="session__date">Grand format</p>
+          <h3 class="m-text-6"><img class="icon3d icon3d--list" src="images/icons-3d/impression-grand-format.webp" width="46" height="46" alt="" aria-hidden="true" loading="lazy">Impression grand format</h3>
+          <p class="session__text">Affiches, panneaux publicitaires, bâches et visuels d’événement.</p>
+          <p class="session__meta m-text-4">Affiches publicitaires · Panneaux de communication · Habillage événementiel</p>
+          <a class="m-link session__book" href="impression-grand-format.html">Découvrir ce service ↗</a>
+        </li>
+<li class="session">
+          <p class="session__date">Publicitaire</p>
+          <h3 class="m-text-6"><img class="icon3d icon3d--list" src="images/icons-3d/industrie-publicitaire.webp" width="46" height="46" alt="" aria-hidden="true" loading="lazy">Industrie publicitaire</h3>
+          <p class="session__text">Enseignes, présentoirs, roll-up, stands et signalétique.</p>
+          <p class="session__meta m-text-4">Enseignes et supports de point de vente · Présentoirs, stands et roll-up · Signalétique intérieure et extérieure</p>
+          <a class="m-link session__book" href="industrie-publicitaire.html">Découvrir ce service ↗</a>
+        </li>
+<li class="session">
+          <p class="session__date">Véhicule</p>
+          <h3 class="m-text-6"><img class="icon3d icon3d--list" src="images/icons-3d/habillage-vehicule.webp" width="46" height="46" alt="" aria-hidden="true" loading="lazy">Habillage de véhicule</h3>
+          <p class="session__text">Lettrage, marquage de flotte et covering partiel de voitures et utilitaires.</p>
+          <p class="session__meta m-text-4">Lettrage de véhicule · Covering partiel · Marquage de flotte professionnelle</p>
+          <a class="m-link session__book" href="habillage-vehicule.html">Découvrir ce service ↗</a>
+        </li>
+<li class="session">
+          <p class="session__date">Design</p>
+          <h3 class="m-text-6"><img class="icon3d icon3d--list" src="images/icons-3d/design-graphique.webp" width="46" height="46" alt="" aria-hidden="true" loading="lazy">Design graphique</h3>
+          <p class="session__text">Création de logo, identité visuelle et mise en page de vos supports imprimés.</p>
+          <p class="session__meta m-text-4">Logo et identité visuelle · Mise en page de brochures · Création de visuels publicitaires</p>
+          <a class="m-link session__book" href="design-graphique.html">Découvrir ce service ↗</a>
+        </li>
+<li class="session">
+          <p class="session__date">Stands</p>
+          <h3 class="m-text-6"><img class="icon3d icon3d--list" src="images/icons-3d/stands-exposition.webp" width="46" height="46" alt="" aria-hidden="true" loading="lazy">Aménagement de stands d’exposition</h3>
+          <p class="session__text">Conception, impression et aménagement de stands sur mesure pour vos salons et foires.</p>
+          <p class="session__meta m-text-4">Stands sur mesure · Stands modulaires et parapluie · Comptoirs, PLV et signalétique</p>
+          <a class="m-link session__book" href="stands-exposition.html">Découvrir ce service ↗</a>
+        </li>
+</ol>
+    </div>
+  </div>
+</section>
+<!-- cta: links to the quote and contact pages -->
+<section id="cta" class="band band--ink" data-8b-section="cta" aria-labelledby="cta-title">
+  <div class="wrap grid cta">
+    <h2 id="cta-title" class="cta__title m-text-2" data-8b-motion="register">Un projet en tête&nbsp;?</h2>
+    <div class="cta__actions">
+      <p class="m-text-5">Devis gratuit. Nous vous conseillons sur le support, le format et les finitions.</p>
+      <a class="m-btn" href="devis.html"><span class="m-btn__label">Demander un devis</span></a>
+      <a class="m-link" href="contact.html">Nous contacter</a>
+    </div>
+  </div>
+</section>
+<!-- faq: questions and answers (native <details>) -->
+<section id="faq" class="faq" data-8b-section="faq" aria-labelledby="faq-title">
+  <div class="wrap grid faq__grid">
+    <h2 id="faq-title" class="m-text-2" data-8b-motion="register">Questions fréquentes.</h2>
+    <div class="faq__list">
+      <details class="faq__item">
+        <summary><span class="m-text-6">Quels documents imprimez-vous ?</span><span class="m-icon-btn" aria-hidden="true"><span class="m-icon-btn__dot"></span></span></summary>
+        <div class="faq__answer"><p>Documents administratifs, commerciaux et publicitaires, étiquettes et adhésifs, panneaux, édition de livres, faire-part, menus et invitations, photocopies noir et couleur, plaques à tampons. Petits et grands formats, toutes quantités.</p></div>
+      </details>
+      <details class="faq__item">
+        <summary><span class="m-text-6">Quel support choisir ?</span><span class="m-icon-btn" aria-hidden="true"><span class="m-icon-btn__dot"></span></span></summary>
+        <div class="faq__answer"><p>Le numérique est idéal pour les petites séries et les documents personnalisés. Pour la visibilité, choisissez entre grand format, bâche, vinyle ou lettrage selon le lieu, la durée et le budget. Nous vous conseillons selon votre projet.</p></div>
+      </details>
+      <details class="faq__item">
+        <summary><span class="m-text-6">Pouvez-vous créer mon logo et mes supports ?</span><span class="m-icon-btn" aria-hidden="true"><span class="m-icon-btn__dot"></span></span></summary>
+        <div class="faq__answer"><p>Oui. Notre équipe de graphistes s’occupe de la création de logotypes, de la mise en page et de la conception de vos supports de communication, jusqu’à l’impression.</p></div>
+      </details>
+      <details class="faq__item">
+        <summary><span class="m-text-6">Puis-je voir des échantillons de papier ?</span><span class="m-icon-btn" aria-hidden="true"><span class="m-icon-btn__dot"></span></span></summary>
+        <div class="faq__answer"><p>Bien sûr. N’hésitez pas à demander des échantillons de papier avec votre devis d’impression.</p></div>
+      </details>
+      <details class="faq__item">
+        <summary><span class="m-text-6">Vous lancez votre entreprise ?</span><span class="m-icon-btn" aria-hidden="true"><span class="m-icon-btn__dot"></span></span></summary>
+        <div class="faq__answer"><p>AlloPrint est au service des nouveaux chefs d’entreprise. Pour les documents nécessaires à votre installation, nous vous aidons de la conception à la réalisation, à des prix attractifs.</p></div>
+      </details>
+      <details class="faq__item">
+        <summary><span class="m-text-6">Que peut-on imprimer en grand format ?</span><span class="m-icon-btn" aria-hidden="true"><span class="m-icon-btn__dot"></span></span></summary>
+        <div class="faq__answer"><p>Affiches, banderoles, bâches, kakémonos, drapeaux et oriflammes ; enseignes, vitrophanie et vinyle adhésif ; posters rigides sur alu ou PVC, reproductions sur toile et textile.</p></div>
+      </details>
+    </div>
+  </div>
+</section>
+<section id="conseils-impression" class="band band--paper" aria-labelledby="conseils-title"><div class="wrap prose-wrap"><div class="prose">
+<h2 id="conseils-title">Préparer votre projet d’impression</h2>
+<p>Comparez les supports, préparez vos fichiers et retrouvez les informations utiles pour demander un devis.</p>
+<ul><li><a class="m-link" href="article.php?slug=impression-palissade-chantier-choisir-support">Palissade de chantier : choisir le support</a></li>
+<li><a class="m-link" href="article.php?slug=preparer-fichier-impression-palissade-chantier">Préparer les fichiers et les raccords</a></li>
+<li><a class="m-link" href="article.php?slug=impression-vinyle-adhesif-finition">Choisir l’adhésif et la finition du vinyle</a></li>
+<li><a class="m-link" href="article.php?slug=prix-impression-vinyle-bache-vitrine-palissade-devis">Comprendre le prix et préparer son devis</a></li>
+<li><a class="m-link" href="article.php?slug=impression-vitrine-vitrophanie-microperfore-depoli">Comparer les films pour une vitrine</a></li>
+<li><a class="m-link" href="article.php?slug=impression-bache-formats-oeillets-finitions">Préparer le format, les œillets et les finitions</a></li>
+<li><a class="m-link" href="articles.php">Tous nos articles et conseils impression →</a></li></ul></div></div></section>
+</main>
+<!-- footer: links, address, phone and copyright -->
+<footer id="footer" class="footer" data-8b-section="footer">
+  <div class="wrap">
+    <div class="footer__cols">
+      <nav class="footer__nav" aria-label="Pied de page">
+        <ul>
+          <li><a class="m-link" href="index.html">Accueil</a></li>
+          <li><a class="m-link" href="services.html">Services</a></li>
+          <li><a class="m-link" href="notre-imprimerie.html">Notre atelier d’impression</a></li>
+          <li><a class="m-link" href="articles.php">Articles</a></li>
+          <li><a class="m-link" href="#editions">Réalisations</a></li>
+          <li><a class="m-link" href="devis.html">Devis</a></li>
+          <li><a class="m-link" href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+      <p class="footer__address">3, avenue 2 Mars, Résidence Marwa, 5e étage<br>Casablanca, Maroc</p>
+      <ul class="footer__social">
+        <li><a class="m-link" href="tel:+212522484425">05 22 48 44 25</a></li>
+        <li><a class="m-link" href="https://wa.me/212668746386" target="_blank" rel="noopener">WhatsApp : 06 68 74 63 86</a></li>
+        <li><a class="m-link" href="mailto:contact@alloprint.ma">contact@alloprint.ma</a></li>
+      </ul>
+    </div>
+    <div class="footer__base">
+      <p class="m-text-4">© 2026 AlloPrint · Impression à Casablanca</p>
+      <a class="m-link" href="#press">Retour en haut</a>
+    </div>
+  </div>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.3.27/dist/lenis.min.js"></script>
+<script src="js/alloprint.js"></script>
+<script data-8b-part="section-script:press">
+(() => {
+  const section = document.getElementById('press');
+  if (!section || !('IntersectionObserver' in window)) return;
+  new IntersectionObserver(([entry]) => section.toggleAttribute('data-offscreen', !entry.isIntersecting)).observe(section);
+})();
+</script>
+<script data-8b-part="scene:press-title">
+queueMotion(() => {
+  gsap.matchMedia().add('(prefers-reduced-motion: no-preference)', () => {
+    const section = document.getElementById('press');
+    const title = section.querySelector('.press__title');
+    const lines = [...title.querySelectorAll('.press__line')];
+    if (lines.length !== 2) throw new Error('press-title: two lines expected');
+    const originals = lines.map(line => line.innerHTML);
+    title.setAttribute('aria-label', lines.map(line => line.textContent.trim()).join(' '));
+    const chars = lines.map(line => {
+      const text = line.textContent;
+      line.textContent = '';
+      line.setAttribute('aria-hidden', 'true');
+      return [...text].map(letter => {
+        const span = document.createElement('span');
+        span.className = 'press__char';
+        span.textContent = letter === ' ' ? '\u00a0' : letter;
+        line.append(span);
+        return span;
+      });
+    });
+    title.classList.add('is-split');
+    const [big, small] = chars;
+    const intro = gsap.timeline({ delay: 0.1 })
+      .from(big, { yPercent: 115, rotation: 10, opacity: 0, duration: 0.8, ease: 'back.out(1.7)', stagger: 0.045 }, 0)
+      .from(small, { yPercent: 115, opacity: 0, duration: 0.7, ease: 'back.out(1.5)', stagger: 0.025 }, 0.35)
+      .fromTo(lines[1], { '--mark': 0 }, { '--mark': 1, duration: 0.9, ease: 'power3.inOut' }, '-=0.5');
+    const wave = gsap.timeline({ repeat: -1, repeatDelay: 4.5, delay: 2.6 })
+      .to(big, { yPercent: -9, duration: 0.28, ease: 'sine.out', stagger: { each: 0.05, yoyo: true, repeat: 1 } });
+    const drift = gsap.timeline({ scrollTrigger: { id: 'press-title', trigger: section, start: 'top top', end: () => `+=${innerHeight}`, scrub: 0.6 } })
+      .to(lines[0], { xPercent: -6, ease: 'none' }, 0)
+      .to(lines[1], { xPercent: 5, ease: 'none' }, 0);
+    return () => {
+      intro.kill(); wave.kill(); drift.scrollTrigger?.kill(); drift.kill();
+      lines.forEach((line, index) => { line.innerHTML = originals[index]; line.removeAttribute('aria-hidden'); ['transform', 'translate', '--mark'].forEach(prop => line.style.removeProperty(prop)); });
+      title.removeAttribute('aria-label');
+      title.classList.remove('is-split');
+    };
+  });
+}, { first: true });
+</script>
+<script data-8b-part="scene:process-run">
+queueMotion(() => {
+  gsap.matchMedia().add('(prefers-reduced-motion: no-preference) and (min-width: 900px)', () => {
+    const section = document.getElementById('process');
+    const windowBox = section.querySelector('.process__window');
+    const track = section.querySelector('.process__track');
+    if (!windowBox || !track) throw new Error('process-run: stage parts missing');
+    section.setAttribute('data-run', '');
+    const travel = () => Math.max(0, track.scrollWidth - windowBox.clientWidth);
+    const setHeight = () => section.style.setProperty('--process-height', `${Math.round(innerHeight + Math.max(travel() * 1.2, innerHeight * 0.9))}px`);
+    setHeight();
+    ScrollTrigger.addEventListener('refreshInit', setHeight);
+    gsap.timeline({ scrollTrigger: { id: 'process-run', trigger: section, start: 'top top', end: 'bottom bottom', scrub: true, invalidateOnRefresh: true } })
+      .fromTo(track, { x: 0 }, { x: () => -travel(), ease: 'none', duration: 1 }, 0);
+    return () => {
+      ScrollTrigger.removeEventListener('refreshInit', setHeight);
+      section.removeAttribute('data-run');
+      section.style.removeProperty('--process-height');
+    };
+  });
+});
+</script>
+<script data-8b-part="scene:editions-pistons">
+queueMotion(() => {
+  gsap.matchMedia().add('(prefers-reduced-motion: no-preference)', () => {
+    const section = document.getElementById('editions');
+    const rack = section.querySelector('.editions__rack');
+    const low = section.querySelectorAll('.editions__lane--low');
+    const high = section.querySelectorAll('.editions__lane--high');
+    if (!rack || !low.length || !high.length) throw new Error('editions-pistons: lanes missing');
+    const offset = () => parseFloat(getComputedStyle(rack).getPropertyValue('--rack-offset')) || 0;
+    gsap.timeline({ scrollTrigger: { id: 'editions-pistons', trigger: rack, start: 'top 95%', end: 'top 40%', scrub: 0.7, invalidateOnRefresh: true } })
+      .fromTo(low, { y: () => -offset() }, { y: 0, ease: 'power1.inOut' }, 0)
+      .fromTo(high, { y: () => offset() }, { y: 0, ease: 'power1.inOut' }, 0)
+      .fromTo(section.querySelectorAll('.editions__lane--low .editions__trail'), { clipPath: 'inset(100% 0% 0% 0%)' }, { clipPath: 'inset(0% 0% 0% 0%)', ease: 'power1.inOut' }, 0)
+      .fromTo(section.querySelectorAll('.editions__lane--high .editions__trail'), { clipPath: 'inset(0% 0% 100% 0%)' }, { clipPath: 'inset(0% 0% 0% 0%)', ease: 'power1.inOut' }, 0);
+  });
+});
+</script>
+<script data-8b-part="scene:workshops-index">
+queueMotion(() => {
+  gsap.matchMedia().add('(prefers-reduced-motion: no-preference)', () => {
+    const section = document.getElementById('workshops');
+    const lane = section.querySelector('.workshops__lane');
+    const carriage = section.querySelector('.workshops__carriage');
+    const rows = [...section.querySelectorAll('.session')];
+    if (!lane || !carriage || !rows.length) throw new Error('workshops-index: lane parts missing');
+    const setY = gsap.quickSetter(carriage, 'y', 'px');
+    let geometry = null;
+    const measure = () => {
+      setY(0);
+      const top = lane.getBoundingClientRect().top;
+      const size = carriage.offsetHeight;
+      geometry = {
+        size, travel: Math.max(0, lane.offsetHeight - size),
+        rows: rows.map(row => { const box = row.getBoundingClientRect(); return box.top - top + Math.min(44, box.height / 2); })
+      };
+    };
+    const render = progress => {
+      if (!geometry) return;
+      setY(-geometry.travel * (1 - progress));
+      const centre = geometry.size / 2 + geometry.travel * progress;
+      rows.forEach((row, index) => row.toggleAttribute('data-waiting', centre < geometry.rows[index]));
+    };
+    const trigger = ScrollTrigger.create({
+      id: 'workshops-index', trigger: lane, start: 'top 62%', end: 'bottom 62%',
+      onUpdate: self => render(self.progress),
+      onRefresh: self => { measure(); render(self.progress); }
+    });
+    return () => {
+      trigger.kill();
+      gsap.set(carriage, { clearProps: 'transform' });
+      rows.forEach(row => row.removeAttribute('data-waiting'));
+    };
+  });
+});
+</script>
+</body>
+</html>

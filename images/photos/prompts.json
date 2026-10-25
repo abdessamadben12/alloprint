@@ -1,0 +1,74 @@
+{
+  "outil": "image_gen intégré (sans API externe)",
+  "date": "2026-10-22",
+  "usage": "Visuels illustratifs générés pour les services AlloPrint ; ne représentent pas des réalisations clients réelles.",
+  "images": [
+    {
+      "fichier": "impression-grand-format.webp",
+      "source": "sources/impression-grand-format.png",
+      "prompt": "Use case: photorealistic-natural\nAsset type: professional print studio service photograph for the local AlloPrint website.\nPrimary request: a real-looking large-format printer producing a beautiful oversized abstract geometric poster in a bright contemporary print workshop.\nScene/backdrop: tidy professional workshop, warm off-white surfaces, unbranded graphite and silver roll-to-roll inkjet printer, paper rolls in soft background.\nSubject: printer and single emerging sheet with sophisticated abstract shapes in deep petrol teal #00677a, acid lime #b9e533 and warm white. No typography on the artwork.\nStyle/medium: premium editorial commercial photography, believable real machinery and material textures, not a 3D render.\nComposition/framing: landscape 3:2, three-quarter view, entire main printing area in central 75% so usable as 4:3 and portrait crops; clean balanced foreground.\nLighting/mood: soft daylight, precise crisp detail on paper and print head, subtle depth of field.\nConstraints: no readable words, no logos, no watermark, no people, no collage. This is an illustrative service photo, not documentary proof of a particular business."
+    },
+    {
+      "fichier": "impression-numerique.webp",
+      "source": "sources/impression-numerique.png",
+      "prompt": "Use case: product-mockup. Asset type: premium commercial photograph for AlloPrint's printing services website. Art direction: sophisticated deep petrol teal #00677a, acid lime #b9e533, warm white, realistic materials and subtle soft shadows, editorial photograph, never CGI. Landscape 3:2; main subject within central 75% for 4:3 card crops. No logos, no brand names, no watermark, no readable text, no collage. Subject: beautifully art directed printed stationery on a warm ivory studio table, thick business cards in a small aligned stack, one open folded brochure, matching letterhead and envelopes with abstract geometric circles and grid shapes in teal and lime, nuanced paper edges and blind embossed detail. Three-quarter overhead view, soft directional daylight from left, tactile premium print finishing. Make the individual paper products immediately recognizable."
+    },
+    {
+      "fichier": "design-graphique.webp",
+      "source": "sources/design-graphique.png",
+      "prompt": "Use case: product-mockup. Asset type: premium commercial photograph for AlloPrint's printing services website. Art direction: sophisticated deep petrol teal #00677a, acid lime #b9e533, warm white, realistic materials and subtle soft shadows, editorial photograph, never CGI. Landscape 3:2; main subject within central 75% for 4:3 card crops. No logos, no brand names, no watermark, no readable text, no collage. Subject: an elegant graphic designer's work desk viewed from slightly above: unbranded slim monitor showing a geometric teal and lime poster layout without letters, printed layout proofs, a fanned paper color swatch guide, drawing tablet and stylus neatly arranged on pale oak, one pencil. Calm bright contemporary studio, physically realistic screen and paper textures. Color proofs central, monitor background; no people, no stock-photo clutter."
+    },
+    {
+      "fichier": "habillage-vehicule.webp",
+      "source": "sources/habillage-vehicule.png",
+      "prompt": "Use case: product-mockup. Asset type: premium commercial photograph for AlloPrint's printing services website. Art direction: sophisticated deep petrol teal #00677a, acid lime #b9e533, warm white, realistic materials and subtle soft shadows, editorial photograph, never CGI. Landscape 3:2; main subject within central 75% for 4:3 card crops. No logos, no brand names, no watermark, no readable text, no collage. Subject: a modern unbranded white commercial panel van with immaculate custom vinyl wrap: bold flowing petrol teal field and curved acid lime stripe wrapping coherently across the side and rear, no lettering. Parked in front of a clean off-white industrial building, soft Mediterranean daylight, front three-quarter view showing the large side panel, realistic wheels and panel gaps, premium professional automotive photography. Whole vehicle in frame with comfortable negative space."
+    },
+    {
+      "fichier": "impression-vinyle.webp",
+      "source": "sources/impression-vinyle.png",
+      "prompt": "Use case: product-mockup. Asset type: professional commercial photograph for AlloPrint printing services. Art direction: deep petrol teal #00677a, acid lime #b9e533, warm ivory; sophisticated geometric artwork, tactile material realism, soft Mediterranean daylight, premium editorial photography, not CGI. Landscape 3:2 composition with main details in central 75% for card crops. No logos, no readable text, no watermark, no collage. Subject: close-up of premium printed adhesive vinyl: three rolls of teal, lime and off-white vinyl on a clean pale workbench, a printed adhesive sheet with elegant large geometric shapes partially peeled back at one corner to reveal its backing paper, small professional squeegee alongside. Realistically curled material, subtle satin sheen, crisp cut edges. Focus on the peeled corner to clearly convey adhesive printing, calm blurred print studio background."
+    },
+    {
+      "fichier": "industrie-publicitaire.webp",
+      "source": "sources/industrie-publicitaire.png",
+      "prompt": "Use case: product-mockup. Asset type: professional commercial photograph for AlloPrint printing services. Art direction: deep petrol teal #00677a, acid lime #b9e533, warm ivory; sophisticated geometric artwork, tactile material realism, soft Mediterranean daylight, premium editorial photography, not CGI. Landscape 3:2 composition with main details in central 75% for card crops. No logos, no readable text, no watermark, no collage. Subject: premium modular exhibition display in a bright modern showroom: one large seamless printed backdrop with striking teal/lime abstract geometry, a matching freestanding roll-up display, a small branded display counter without lettering, and a slim brochure stand. Three-quarter wide view with coherent realistic scale, ceiling light and soft side daylight, polished concrete floor. All displays physically plausible and beautifully assembled, no people, no words."
+    },
+    {
+      "fichier": "palissade-chantier.webp",
+      "source": "sources/palissade-chantier.png",
+      "prompt": "Use case: photorealistic-natural. Asset type: professional service photo for AlloPrint construction hoarding printing. Landscape 3:2, photographic architectural perspective at pedestrian eye level. A clean urban construction boundary made of perfectly aligned opaque printed rigid panels, visible panel seams and sturdy bases, along a broad pale sidewalk. Long eye-catching abstract geometric composition in deep petrol teal #00677a, acid lime #b9e533 and ivory, with elegant abstract architectural line graphics. A partially built modern building and one construction crane visible above the hoarding, soft Mediterranean daylight, neutral off-white architecture. The printed panels are the foreground main subject with excellent crisp detail and true material texture. Real photograph style, no CGI, no readable text, no company logos, no watermark, no people or vehicles, no collage. Central crop should still clearly communicate construction hoarding."
+    },
+    {
+      "fichier": "impression-bache.webp",
+      "source": "sources/impression-bache.png",
+      "prompt": "Use case: product-mockup. Asset type: professional close-up photograph for banner printing service on AlloPrint website. Landscape 3:2. A premium outdoor PVC banner with beautiful bold abstract geometric printing in deep petrol teal #00677a, acid lime #b9e533 and warm white, stretched neatly on a silver metal display frame. Focus on the lower reinforced hem and two realistic polished metal eyelets, evenly spaced, with black elastic bungee fastenings going through the eyelets and around the frame. Banner occupies most of the frame, tactile lightly woven matte PVC surface with subtle tension, very slight naturally curved edge; softly blurred neutral exhibition wall beyond. Premium commercial studio photography, soft natural directional light, precise manufacturing details. No lettering, no logos, no watermark, no collage, not CGI. Compose so center 4:3 crop includes eyelets and printed banner."
+    },
+    {
+      "fichier": "impression-lettrage.webp",
+      "source": "sources/impression-lettrage.png",
+      "prompt": "Use case: photorealistic-natural. Asset type: premium professional photo for adhesive lettering service on AlloPrint website. Landscape 3:2. Close detail of expertly applied matte white cut-vinyl lettering spelling exactly \"ATELIER\" on a spotless contemporary glass storefront, simple refined uppercase sans serif typography with generous spacing, aligned on one straight horizontal baseline. A small understated lime green circle decal and thin line below the word, sophisticated petrol teal #00677a painted interior wall and pale wood furniture softly visible through glass. The individual separate letters and subtly visible vinyl edges must be clear, shallow angle catching soft daylight reflection. Elegant storefront photography with all letters legible, no people, no other words, no logos, no watermark, no collage, no CGI. The word centered with generous clear margins on all sides for a 4:3 crop."
+    }
+  ],
+  "elevenlabs": {
+    "outil": "ElevenLabs (ElevenCreative, flow « AlloPrint — icônes & photos du site »)",
+    "date": "2026-10-25",
+    "images": [
+      {
+        "fichier": "../icons-3d/*.webp (9 icônes)",
+        "source": "sources/icones-3d-services.png",
+        "modele": "gpt-image-2.5-sunburst, 1:1 2K",
+        "note": "Planche 3×3 découpée et détourée (rembg isnet-general-use)."
+      },
+      {
+        "fichier": "notre-imprimerie.webp",
+        "source": "sources/notre-imprimerie.png",
+        "modele": "gpt-image-2.5-sunburst, 3:2 2K"
+      },
+      {
+        "fichier": "stands-exposition.webp",
+        "source": "sources/stands-exposition.jpg",
+        "modele": "gemini-3.1-flash-lite-image, 16:9 1K, recadré en 3:2"
+      }
+    ]
+  }
+}

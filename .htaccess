@@ -1,0 +1,41 @@
+# Apache 2.4. L’accueil reste index.html ; PHP sert les articles, le sitemap et l’admin.
+DirectoryIndex index.html index.php
+Options -Indexes -MultiViews
+AddDefaultCharset UTF-8
+
+<FilesMatch "(?i)(^\.|\.(json|ini|log|md|bak|tmp|sql|ps1|py)$|^router\.php$)">
+    Require all denied
+</FilesMatch>
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^(?:data|inc|admin/inc)(?:/|$) - [F,L,NC]
+    RewriteRule ^uploads/.*\.(?:php[0-9]?|phtml|phar|cgi|pl|py|sh|html?|svg)$ - [F,L,NC]
+    RewriteRule ^sitemap\.xml$ sitemap.php [L]
+    # Ancienne adresse de l’accueil, sans créer de fichier index.php.
+    RewriteRule ^index\.php$ index.html [R=301,L]
+    RewriteRule ^impression-lettrage\.html$ impression-vitrine.html [R=301,L]
+    # Ne s’applique qu’au domaine de production ; localhost reste en HTTP.
+    RewriteCond %{HTTP_HOST} ^(?:www\.)?alloprint\.ma$ [NC]
+    RewriteCond %{HTTPS} !=on [OR]
+    RewriteCond %{HTTP_HOST} ^www\.alloprint\.ma$ [NC]
+    RewriteRule ^ https://alloprint.ma%{REQUEST_URI} [R=301,L,NE]
+</IfModule>
+
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set X-Frame-Options "SAMEORIGIN"
+</IfModule>
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/css application/javascript application/json application/xml image/svg+xml
+</IfModule>
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType text/css "access plus 1 day"
+    ExpiresByType application/javascript "access plus 1 day"
+    ExpiresByType image/webp "access plus 30 days"
+    ExpiresByType image/jpeg "access plus 30 days"
+    ExpiresByType image/png "access plus 30 days"
+    ExpiresByType image/svg+xml "access plus 30 days"
+</IfModule>

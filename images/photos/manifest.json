@@ -1,0 +1,79 @@
+{
+  "impression-numerique": {
+    "src": "images/photos/impression-numerique.webp",
+    "small": "images/photos/impression-numerique-640.webp",
+    "width": 1536,
+    "height": 1024,
+    "alt": "Cartes de visite, dépliant et enveloppes aux motifs bleu pétrole et vert anis"
+  },
+  "impression-grand-format": {
+    "src": "images/photos/impression-grand-format.webp",
+    "small": "images/photos/impression-grand-format-640.webp",
+    "width": 1536,
+    "height": 1024,
+    "alt": "Traceur grand format imprimant une affiche aux motifs géométriques bleu pétrole et vert anis"
+  },
+  "industrie-publicitaire": {
+    "src": "images/photos/industrie-publicitaire.webp",
+    "small": "images/photos/industrie-publicitaire-640.webp",
+    "width": 1536,
+    "height": 1024,
+    "alt": "Stand publicitaire avec comptoir, fond imprimé, roll-up et présentoir à brochures"
+  },
+  "habillage-vehicule": {
+    "src": "images/photos/habillage-vehicule.webp",
+    "small": "images/photos/habillage-vehicule-640.webp",
+    "width": 1536,
+    "height": 1024,
+    "alt": "Utilitaire blanc habillé de vinyle bleu pétrole avec une courbe vert anis"
+  },
+  "palissade-chantier": {
+    "src": "images/photos/palissade-chantier.webp",
+    "small": "images/photos/palissade-chantier-640.webp",
+    "width": 1536,
+    "height": 1024,
+    "alt": "Palissade de chantier imprimée de motifs géométriques devant un bâtiment en construction"
+  },
+  "impression-vinyle": {
+    "src": "images/photos/impression-vinyle.webp",
+    "small": "images/photos/impression-vinyle-640.webp",
+    "width": 1536,
+    "height": 1024,
+    "alt": "Rouleaux de vinyle et adhésif imprimé dont un coin révèle le papier de protection"
+  },
+  "design-graphique": {
+    "src": "images/photos/design-graphique.webp",
+    "small": "images/photos/design-graphique-640.webp",
+    "width": 1536,
+    "height": 1024,
+    "alt": "Bureau de création graphique avec maquette à l’écran, nuancier et épreuves imprimées"
+  },
+  "impression-bache": {
+    "src": "images/photos/impression-bache.webp",
+    "small": "images/photos/impression-bache-640.webp",
+    "width": 1448,
+    "height": 1086,
+    "alt": "Détail d’une bâche imprimée avec ourlet renforcé, œillets et attaches sur un cadre"
+  },
+  "impression-lettrage": {
+    "src": "images/photos/impression-lettrage.webp",
+    "small": "images/photos/impression-lettrage-640.webp",
+    "width": 1536,
+    "height": 1024,
+    "alt": "Lettres adhésives blanches formant le mot ATELIER sur une vitrine"
+  },
+  "stands-exposition": {
+    "src": "images/photos/stands-exposition.webp",
+    "small": "images/photos/stands-exposition-640.webp",
+    "width": 1152,
+    "height": 768,
+    "alt": "Stand d’exposition sur mesure avec mur rétroéclairé bleu pétrole et vert anis, comptoir d’accueil et salon"
+  },
+  "notre-imprimerie": {
+    "src": "images/photos/notre-imprimerie.webp",
+    "small": "images/photos/notre-imprimerie-640.webp",
+    "width": 1536,
+    "height": 1020,
+    "alt": "Atelier d’impression lumineux : un technicien massicote une affiche, un autre contrôle un tirage grand format"
+  }
+}
