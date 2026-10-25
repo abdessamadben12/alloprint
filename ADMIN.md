@@ -29,6 +29,8 @@ Protection anti-spam : champ piège invisible, délai minimum, 5 envois max. par
 - **Référencement (SEO)** : titre et description de chaque page.
 
 ## Mise en ligne
+Voir aussi [CONFIGURATION.md](CONFIGURATION.md) (serveur, PHP Server dans VS Code, sitemap, SEO).
+
 1. PHP 8.0 ou plus, Apache avec `.htaccess` autorisé.
 2. Dossiers `data/` et `uploads/articles/` modifiables par PHP (755/775). Pages `.html` modifiables pour l’onglet SEO.
 3. Utilisez le site en HTTPS.
@@ -36,4 +38,5 @@ Protection anti-spam : champ piège invisible, délai minimum, 5 envois max. par
 - Serveur Nginx : reproduire les règles du `.htaccess` dans la configuration.
 
 ## Tester en local
-XAMPP : copiez `site/` dans `htdocs/alloprint/site/`, puis ouvrez http://localhost/alloprint/site/login.
+- XAMPP : copiez `site/` dans `htdocs/alloprint/site/`, puis ouvrez http://localhost/alloprint/site/login.
+- Serveur PHP intégré : `php -S localhost:8000 router.php` dans le dossier `site/` (le routeur applique les adresses propres et les protections que ce serveur ne lit pas dans `.htaccess`).

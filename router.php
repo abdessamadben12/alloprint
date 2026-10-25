@@ -19,13 +19,23 @@ if (str_contains($relative, "\0") || str_contains($relative, '\\')
     || (str_starts_with(strtolower($relative), 'uploads/') && !preg_match('~\.(?:jpe?g|png|webp)$~i', $relative))) {
     http_response_code(403); exit('Accès interdit.');
 }
-if ($relative === 'index.php') {
-    header('Location: ' . $prefix . '/index.html', true, 301); exit;
+// Mêmes adresses propres que le .htaccess (Apache) : /services, /article/mon-article, /login…
+if (in_array($relative, ['index.php', 'index.html'], true)) {
+    header('Location: ' . $prefix . '/', true, 301); exit;
 }
-if ($relative === 'impression-lettrage.html') {
-    header('Location: ' . $prefix . '/impression-vitrine.html', true, 301); exit;
+if (preg_match('~^impression-lettrage(?:\.html)?$~', $relative)) {
+    header('Location: ' . $prefix . '/impression-vitrine', true, 301); exit;
+}
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && preg_match('~^([a-z0-9-]+)\.html$~', $relative, $m)) {
+    header('Location: ' . $prefix . '/' . $m[1], true, 301); exit;
 }
 if ($relative === 'sitemap.xml') $relative = 'sitemap.php';
+if ($relative === 'login') $relative = 'admin/login.php';
+if (preg_match('~^article/([a-z0-9-]+)/?$~', $relative, $m)) { $_GET['slug'] = $m[1]; $relative = 'article.php'; }
+if ($relative !== '' && !str_contains(basename($relative), '.') && !is_dir(__DIR__ . '/' . $relative)) {
+    if (is_file(__DIR__ . '/' . $relative . '.html')) $relative .= '.html';
+    elseif (is_file(__DIR__ . '/' . $relative . '.php')) $relative .= '.php';
+}
 if ($relative === '') $relative = 'index.html';
 if ($relative === 'admin') {
     header('Location: ' . $prefix . '/admin/', true, 301); exit;
@@ -45,7 +55,7 @@ if (str_ends_with($relative, '.php')) {
     require $target;
     return true;
 }
-if ($relative === 'index.html' && str_ends_with($path, '/')) {
+if (str_ends_with($relative, '.html') && !str_ends_with($path, '.html')) {
     header('Content-Type: text/html; charset=utf-8');
     readfile($target);
     return true;

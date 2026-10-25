@@ -21,7 +21,11 @@ function admin_header(string $title, string $active = ''): void
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
 <title><?= e($title) ?> — Admin AlloPrint</title>
-<link rel="icon" type="image/png" href="../images/logo.png">
+<link rel="icon" href="../favicon.ico?v=2" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="../images/favicon/favicon-32.png?v=2">
+<link rel="apple-touch-icon" href="../images/favicon/apple-touch-icon.png?v=2">
+<link rel="manifest" href="../site.webmanifest">
+<meta name="theme-color" content="#00677a">
 <link rel="stylesheet" href="admin.css">
 </head>
 <body class="adm">

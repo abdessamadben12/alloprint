@@ -4,6 +4,7 @@
  * Stockage en fichiers JSON (dossier data/, protégé par .htaccess) : aucune base de données à configurer.
  */
 declare(strict_types=1);
+require_once __DIR__ . '/../../inc/config.php';
 
 date_default_timezone_set('Africa/Casablanca');
 
@@ -44,6 +45,7 @@ function start_session(): void
 
 function send_security_headers(): void
 {
+    header('X-Robots-Tag: noindex, nofollow');
     header('X-Frame-Options: DENY');
     header('X-Content-Type-Options: nosniff');
     header('Referrer-Policy: same-origin');
@@ -233,8 +235,24 @@ function slugify(string $text): string
 function all_articles(): array
 {
     $list = read_json('articles', []);
+    foreach ($list as &$item) {
+        // « noindex » peut avoir été enregistré comme texte ("False"/"True") : on le normalise en booléen
+        $item['noindex'] = filter_var($item['noindex'] ?? false, FILTER_VALIDATE_BOOLEAN);
+    }
+    unset($item);
     usort($list, fn($a, $b) => strcmp($b['date'] ?? '', $a['date'] ?? ''));
     return $list;
+}
+
+/** Une seule règle de publication pour la liste, les articles et le sitemap. */
+function published_articles(): array
+{
+    return array_values(array_filter(all_articles(), static function (array $article): bool {
+        $date = $article['date'] ?? '';
+        return ($article['statut'] ?? '') === 'publie'
+            && preg_match('/^\d{4}-\d{2}-\d{2}$/', $date)
+            && $date <= date('Y-m-d');
+    }));
 }
 
 function find_article(string $id): ?array
@@ -328,7 +346,7 @@ function all_prices(): array
 /** Pages statiques dont le titre et la description sont modifiables depuis l'admin. */
 function seo_pages(): array
 {
-    $pages = ['index.html' => 'Accueil', 'services.html' => 'Services', 'notre-imprimerie.html' => 'Notre imprimerie'];
+    $pages = ['index.html' => 'Accueil', 'services.html' => 'Services d’impression', 'notre-imprimerie.html' => 'Notre atelier d’impression'];
     foreach (SERVICES as [$label, $page]) $pages[$page] = $label;
     $pages['contact.html'] = 'Contact';
     $pages['devis.html'] = 'Devis';
@@ -359,6 +377,18 @@ function write_page_meta(string $page, string $title, string $desc): void
     $html = preg_replace('~<meta name="description" content=".*?">~s', '<meta name="description" content="' . $d . '">', $html, 1);
     $html = preg_replace('~<meta property="og:title" content=".*?">~s', '<meta property="og:title" content="' . $t . '">', $html, 1);
     $html = preg_replace('~<meta property="og:description" content=".*?">~s', '<meta property="og:description" content="' . $d . '">', $html, 1);
+    $html = preg_replace('~<meta property="og:image:alt" content=".*?">~s', '<meta property="og:image:alt" content="' . $t . '">', $html, 1);
+    // données structurées : nom et description de la page (nœud WebPage)
+    $html = preg_replace_callback('~(<script type="application/ld\+json">)(.*?)(</script>)~s', function ($m) use ($title, $desc) {
+        $data = json_decode(str_replace('<\\/', '</', $m[2]), true);
+        if (!is_array($data) || empty($data['@graph'])) return $m[0];
+        foreach ($data['@graph'] as &$node) {
+            if (isset($node['@id']) && str_ends_with((string)$node['@id'], '#webpage')) { $node['name'] = $title; $node['description'] = $desc; }
+        }
+        unset($node);
+        $json = json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        return $m[1] . str_replace('</', '<\\/', (string)$json) . $m[3];
+    }, $html, 1);
     $tmp = $file . '.tmp';
     if (file_put_contents($tmp, $html, LOCK_EX) === false || !rename($tmp, $file)) {
         @unlink($tmp);

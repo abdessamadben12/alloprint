@@ -32,6 +32,11 @@ if ($valid && $_SERVER['REQUEST_METHOD'] === 'POST') {
 <meta name="robots" content="noindex, nofollow">
 <base href="<?= e(site_base_path()) ?>admin/">
 <title>Nouveau mot de passe — Admin AlloPrint</title>
+<link rel="icon" href="../favicon.ico?v=2" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="../images/favicon/favicon-32.png?v=2">
+<link rel="apple-touch-icon" href="../images/favicon/apple-touch-icon.png?v=2">
+<link rel="manifest" href="../site.webmanifest">
+<meta name="theme-color" content="#00677a">
 <link rel="stylesheet" href="admin.css">
 </head>
 <body class="login">

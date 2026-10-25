@@ -1,6 +1,6 @@
 # Configuration AlloPrint : HTML, PHP et référencement
 
-L’accueil est **`index.html`**, les services restent en `.html`. Aucun `index.php` public n’est nécessaire. PHP gère les articles, l’administration, les prix et le sitemap. Le fichier `admin/index.php` reste le tableau de bord de l’administration.
+L’accueil est **`index.html`**, les services restent des fichiers `.html`, mais **les adresses publiques n’ont plus d’extension** : `/services`, `/impression-vinyle`, `/articles`, `/article/mon-article`, `/login`, `/admin/…`. Les anciennes adresses en `.html` / `.php` redirigent en 301. Ce sont le `.htaccess` (Apache) et `router.php` (développement) qui font la correspondance. PHP gère les articles, l’administration, les prix, les formulaires (SMTP) et le sitemap.
 
 ## Démarrer dans votre environnement Windows
 
@@ -8,9 +8,9 @@ PHP est disponible ici dans `C:/xampp/php/php.exe`. La configuration `.vscode/se
 
 1. Ouvrir le dossier `alloprint` dans VS Code.
 2. Arrêter puis relancer **PHP Server: Serve project** pour charger les réglages.
-3. Ouvrir `http://localhost:3000/site/` ou `http://localhost:3000/site/index.html`.
-4. Articles : `http://localhost:3000/site/articles.php`.
-5. Administration : `http://localhost:3000/site/admin/`.
+3. Ouvrir `http://localhost:3000/site/`.
+4. Articles : `http://localhost:3000/site/articles`.
+5. Connexion : `http://localhost:3000/site/login`, puis administration : `http://localhost:3000/site/admin/`.
 
 Autre lancement depuis la racine du projet, dans PowerShell :
 
@@ -41,7 +41,7 @@ Le routeur est nécessaire en développement : le serveur intégré PHP ne lit p
 - Apache doit autoriser les `.htaccess` (`AllowOverride All`) et disposer de `mod_rewrite`. Les modules `headers`, `expires`, `filter` et `deflate` activent les en-têtes, le cache et la compression configurés.
 - Installer le certificat HTTPS avant la mise en ligne. La redirection vers HTTPS et sans `www` ne concerne que `alloprint.ma`, pas localhost. Si un proxy termine HTTPS en amont, adapter cette règle à la configuration HTTPS de l’hébergeur pour éviter une boucle.
 - Autoriser PHP à écrire dans `data/` et `uploads/articles/`. Pour modifier les titres depuis l’admin, PHP doit aussi pouvoir remplacer les pages `.html` dans leur répertoire. Utiliser des droits adaptés à l’utilisateur PHP, sans `777`.
-- Créer le compte administrateur en local avant de transférer `data/admin.json`, ou protéger l’accès à `/admin/` pendant cette première configuration. Aucun identifiant par défaut n’est fourni.
+- Le compte administrateur existe déjà dans `data/admin.json` (connexion avec **contact@alloprint.ma** sur `/login`). Changer le mot de passe dans Admin › Mon compte.
 - Lors des mises à jour, conserver les données existantes dans `data/` et `uploads/articles/` : les écraser remplacerait vos articles, prix ou compte administrateur.
 
 `.user.ini` fixe les limites d’envoi et les réglages PHP sous CGI/FPM. Sous Apache avec `mod_php`, reporter ces valeurs dans le `php.ini` utilisé par le serveur. Le fuseau `Africa/Casablanca`, l’UTF-8 et les paramètres de session sont également initialisés dans `inc/config.php`. Le réglage du cookie sécurisé suit la connexion HTTPS reçue par PHP.
@@ -56,9 +56,9 @@ Après un changement de domaine ou de sous-dossier, depuis la racine du projet :
 php outils/configurer-seo.php
 ```
 
-Cette commande régénère les balises canonical, les URL Open Graph, les données structurées et `robots.txt`, sans changer les titres ni les contenus. Adapter aussi le domaine de redirection dans `.htaccess`. Si le site est déployé dans un sous-dossier, reporter les règles de robots dans le **`robots.txt` à la racine du domaine**, car celui d’un sous-dossier n’est pas utilisé par les moteurs.
+⚠️ **Ce script est obsolète** depuis le passage aux adresses sans extension : il réécrirait des URL canoniques en `.html`. Ne pas le relancer. Les balises SEO de chaque page sont maintenant dans le bloc `<!-- seo:start --> … <!-- seo:end -->` (canonical, Open Graph, données structurées LocalBusiness / Service / BreadcrumbList / FAQPage). Les titres et descriptions se modifient dans Admin › Référencement, qui met aussi à jour Open Graph et les données structurées. Adapter aussi le domaine de redirection dans `.htaccess`. Si le site est déployé dans un sous-dossier, reporter les règles de robots dans le **`robots.txt` à la racine du domaine**, car celui d’un sous-dossier n’est pas utilisé par les moteurs.
 
-Le sitemap est **`https://alloprint.ma/sitemap.php`**. L’alias `/sitemap.xml` est également disponible avec Apache ou le routeur local. Il inclut les pages publiques et les articles publiés à la date courante, en excluant les brouillons, les publications futures et les articles marqués `noindex`. Les modifications de publication sont prises en compte automatiquement.
+Le sitemap est **`https://alloprint.ma/sitemap.xml`** (servi par `sitemap.php` ; l’ancienne adresse `/sitemap.php` redirige). Il liste les adresses sans extension avec la date de dernière modification. Il inclut les pages publiques et les articles publiés à la date courante, en excluant les brouillons, les publications futures et les articles marqués `noindex`. Les modifications de publication sont prises en compte automatiquement.
 
 Les six articles se trouvent dans `data/articles.json` et sont modifiables depuis l’administration. Les pages de services, l’accueil et les articles sont reliés entre eux par des liens HTML. Les noms visibles privilégient « impression » ; l’ancienne URL `notre-imprimerie.html` est conservée pour préserver les liens existants.
 
@@ -72,14 +72,14 @@ Avec un serveur démarré :
 python outils/verifier-site.py http://localhost:3000/site/
 ```
 
-Vérifier également l’accès aux articles, au formulaire de connexion et au sitemap sur l’hébergement réel. `data/articles.json`, `inc/config.php` et `.user.ini` doivent renvoyer **403**, un article inconnu **404**.
+Vérifier également l’accès aux articles, au formulaire de connexion (`/login`) et au sitemap (`/sitemap.xml`) sur l’hébergement réel. `data/articles.json`, `inc/config.php` et `.user.ini` doivent renvoyer **403**, un article inconnu **404**.
 
-Les formulaires de contact et de devis conservent leur fonctionnement existant : ils ouvrent la messagerie du visiteur avec un message prérempli. Aucun envoi SMTP automatique n’est configuré.
+Les formulaires de contact et de devis envoient les demandes par **SMTP** (`api/envoyer.php`, réglages dans Admin › Messagerie SMTP) et les enregistrent dans Admin › Messages reçus. Si PHP ne répond pas, le formulaire ouvre la messagerie du visiteur en secours.
 
 ## Après mise en ligne
 
 1. Vérifier le domaine dans Google Search Console.
-2. Soumettre l’URL du sitemap et inspecter les quatre pages de services.
+2. Soumettre `https://alloprint.ma/sitemap.xml` et inspecter les quatre pages de services prioritaires (`/palissade-chantier`, `/impression-vinyle`, `/impression-vitrine`, `/impression-bache`).
 3. Suivre les impressions, clics et requêtes de ces pages ; enrichir les contenus avec des réalisations et informations vérifiables.
 
 Les changements préparent le référencement mais ne garantissent ni l’indexation ni une position. Les URL localhost ne sont pas accessibles à Google. Références : [guide SEO Google](https://developers.google.com/search/docs/fundamentals/seo-starter-guide?hl=fr), [URL canoniques](https://developers.google.com/search/docs/crawling-indexing/consolidate-duplicate-urls?hl=fr), [sitemaps](https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap?hl=fr).

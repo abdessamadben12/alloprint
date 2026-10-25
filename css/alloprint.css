@@ -423,3 +423,8 @@
 .request__status[data-kind="ok"] { border-left-color: var(--color-2); }
 .request__status[data-kind="error"] { border-left-color: #ff8a7a; }
 .request__form button[disabled] { opacity: .65; cursor: progress; }
+
+/* liens vers les services prioritaires (accueil, articles) */
+.service-links { display: flex; flex-wrap: wrap; gap: 12px 24px; margin-block: 24px; grid-column: 1 / -1; }
+.service-links a { max-width: 100%; overflow-wrap: anywhere; }
+.post-related { margin-top: 48px; }

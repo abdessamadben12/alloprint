@@ -5,8 +5,8 @@ require __DIR__ . '/inc/site.php';
 
 $slug = is_string($_GET['slug'] ?? null) ? $_GET['slug'] : '';
 $article = null;
-foreach (all_articles() as $a) {
-    if (($a['slug'] ?? '') === $slug && ($a['statut'] ?? '') === 'publie' && ($a['date'] ?? '') <= date('Y-m-d')) { $article = $a; break; }
+foreach (published_articles() as $a) {
+    if (($a['slug'] ?? '') === $slug) { $article = $a; break; }
 }
 if (!$article) {
     http_response_code(404);
@@ -30,10 +30,20 @@ $ld = [
     'datePublished' => $a['date'],
     'dateModified' => substr($a['updated'] ?? $a['date'], 0, 10),
     'mainEntityOfPage' => $canonical,
-    'author' => ['@type' => 'Organization', 'name' => 'AlloPrint'],
+    'author' => ['@type' => 'Organization', 'name' => 'AlloPrint', 'url' => site_url('notre-imprimerie')],
     'publisher' => ['@type' => 'Organization', 'name' => 'AlloPrint', 'logo' => ['@type' => 'ImageObject', 'url' => site_url('images/logo.png')]],
 ];
 $svc = (!empty($a['service']) && isset(SERVICES[$a['service']])) ? SERVICES[$a['service']] : null;
+$breadcrumbs = [
+    '@context' => 'https://schema.org', '@type' => 'BreadcrumbList',
+    'itemListElement' => [
+        ['@type' => 'ListItem', 'position' => 1, 'name' => 'Accueil', 'item' => site_url('')],
+        ['@type' => 'ListItem', 'position' => 2, 'name' => 'Conseils impression', 'item' => site_url('articles')],
+        ['@type' => 'ListItem', 'position' => 3, 'name' => $a['titre'], 'item' => $canonical],
+    ],
+];
+$related = array_values(array_filter(published_articles(), fn($other) => $other['id'] !== $a['id'] && empty($other['noindex'])));
+usort($related, fn($left, $right) => (int)($right['service'] === $a['service']) <=> (int)($left['service'] === $a['service']));
 
 site_header([
     'title' => $title,
@@ -43,14 +53,14 @@ site_header([
     'type' => 'article',
     'noindex' => !empty($a['noindex']),
     'head_extra' => '<meta property="article:published_time" content="' . e($a['date']) . '">' . "\n"
-        . '<script type="application/ld+json">' . json_encode($ld, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG) . '</script>' . "\n",
+        . '<script type="application/ld+json">' . json_encode([$ld, $breadcrumbs], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG) . '</script>' . "\n",
 ], 'articles');
 ?>
 <section id="hero" class="hero" data-8b-section="hero" aria-labelledby="hero-title">
   <div class="wrap grid hero__grid">
     <p class="hero__crumbs m-text-4"><a href="./">Accueil</a> <span aria-hidden="true">/</span> <a href="articles">Articles</a> <span aria-hidden="true">/</span> <span aria-current="page"><?= e($a['titre']) ?></span></p>
     <h1 id="hero-title" class="hero__title hero__title--article m-text-2"><?= e($a['titre']) ?></h1>
-    <p class="hero__lead m-text-5"><time datetime="<?= e($a['date']) ?>"><?= e(format_date_fr($a['date'])) ?></time><?php if ($svc): ?> · <?= e($svc[0]) ?><?php endif; ?></p>
+    <p class="hero__lead m-text-5">Par AlloPrint · <time datetime="<?= e($a['date']) ?>"><?= e(format_date_fr($a['date'])) ?></time><?php if ($svc): ?> · <?= e($svc[0]) ?><?php endif; ?></p>
   </div>
 </section>
 <article class="band band--paper" aria-labelledby="hero-title">
@@ -66,8 +76,17 @@ site_header([
       <div class="detail__box m-surface post-svc">
         <p class="m-text-4">Notre service</p>
         <p><?= e($svc[0]) ?> à Casablanca : découvrez nos solutions et demandez votre devis gratuit.</p>
-        <a class="m-btn-2" href="<?= e(str_replace('.html', '', $svc[1])) ?>"><span class="m-btn-2__label">Découvrir le service ↗</span></a>
+        <a class="m-btn-2" href="<?= e(str_replace('.html', '', $svc[1])) ?>"><span class="m-btn-2__label"><?= e($svc[0]) ?> ↗</span></a>
+        <a class="m-link" href="devis?service=<?= e($a['service']) ?>">Demander un devis pour ce service</a>
       </div>
+    <?php endif; ?>
+    <?php if ($related): ?>
+    <aside class="prose post-related" aria-labelledby="related-posts">
+      <h2 id="related-posts">Pour préparer votre impression</h2>
+      <ul><?php foreach (array_slice($related, 0, 3) as $other): ?>
+        <li><a class="m-link" href="article/<?= e(rawurlencode($other['slug'])) ?>"><?= e($other['titre']) ?></a></li>
+      <?php endforeach; ?></ul>
+    </aside>
     <?php endif; ?>
     <p style="margin-top:40px"><a class="m-link" href="articles">← Tous les articles</a></p>
   </div>

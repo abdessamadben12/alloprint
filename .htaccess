@@ -1,20 +1,38 @@
-# AlloPrint — adresses propres (sans .html / .php)
-#   /services, /contact, /devis…  → pages .html
-#   /articles, /article/mon-article → articles PHP
-#   /login                          → connexion à l'administration
-#   /admin/…                        → pages de l'administration
-Options -MultiViews -Indexes
+# AlloPrint — Apache 2.4 (cPanel / XAMPP)
+# Adresses propres : /services, /contact, /devis, /articles, /article/mon-article, /login, /admin/…
 DirectoryIndex index.html index.php
+Options -Indexes -MultiViews
+AddDefaultCharset UTF-8
+AddType application/manifest+json .webmanifest
+
+# Fichiers internes jamais servis (fichiers cachés, données, docs, routeur de dev)
+<FilesMatch "(?i)(^\.|\.(json|ini|log|md|bak|tmp|sql|ps1|py)$|^router\.php$|^LICENSE$)">
+    Require all denied
+</FilesMatch>
 
 <IfModule mod_rewrite.c>
 RewriteEngine On
 
-# Chemin de base du site (fonctionne à la racine du domaine comme dans un sous-dossier XAMPP)
+# Chemin de base (racine du domaine ou sous-dossier XAMPP)
 RewriteCond %{REQUEST_URI}::$1 ^(.*?/)(.*)::\2$
 RewriteRule ^(.*)$ - [E=BASE:%1]
 
-# --- Redirections 301 des anciennes adresses vers les adresses propres (requêtes GET uniquement) ---
-RewriteRule ^impression-lettrage(\.html)?$ %{ENV:BASE}impression-vitrine [R=301,L]
+# Production uniquement : HTTPS et domaine sans « www » (localhost n'est pas concerné)
+RewriteCond %{HTTP_HOST} ^(?:www\.)?alloprint\.ma$ [NC]
+RewriteCond %{HTTPS} !=on [OR]
+RewriteCond %{HTTP_HOST} ^www\.alloprint\.ma$ [NC]
+RewriteRule ^ https://alloprint.ma%{REQUEST_URI} [R=301,L,NE]
+
+# Dossiers internes et scripts interdits dans uploads/
+RewriteRule ^(?:data|inc|admin/inc)(?:/|$) - [F,L,NC]
+RewriteRule ^uploads/.*\.(?:php[0-9]?|phtml|phar|cgi|pl|py|sh|html?|svg)$ - [F,L,NC]
+
+# Sitemap
+RewriteRule ^sitemap\.xml$ sitemap.php [L]
+
+# --- Redirections 301 des anciennes adresses (GET) vers les adresses propres ---
+RewriteRule ^impression-lettrage(?:\.html)?$ %{ENV:BASE}impression-vitrine [R=301,L]
+RewriteRule ^index\.php$ %{ENV:BASE} [R=301,L]
 
 RewriteCond %{REQUEST_METHOD} GET
 RewriteCond %{THE_REQUEST} \s[^?\s]*/index\.html[\s?]
@@ -33,14 +51,18 @@ RewriteCond %{THE_REQUEST} \s[^?\s]*/articles\.php[\s?]
 RewriteRule ^articles\.php$ %{ENV:BASE}articles [R=301,L]
 
 RewriteCond %{REQUEST_METHOD} GET
+RewriteCond %{THE_REQUEST} \s[^?\s]*/sitemap\.php[\s?]
+RewriteRule ^sitemap\.php$ %{ENV:BASE}sitemap.xml [R=301,L]
+
+RewriteCond %{REQUEST_METHOD} GET
 RewriteCond %{THE_REQUEST} \s[^?\s]*/admin/login\.php[\s?]
 RewriteRule ^admin/login\.php$ %{ENV:BASE}login [R=301,L,QSA]
 
-# Retire la barre finale sur les pages (ex. /services/ → /services), sauf vrais dossiers
+# Barre finale retirée (/services/ → /services), sauf vrais dossiers
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.+)/$ %{ENV:BASE}$1 [R=301,L]
 
-# --- Correspondances adresse propre → fichier ---
+# --- Adresse propre → fichier ---
 RewriteRule ^login/?$ admin/login.php [L,QSA]
 RewriteRule ^article/([a-z0-9-]+)/?$ article.php?slug=$1 [L,QSA]
 
@@ -55,9 +77,36 @@ RewriteCond %{REQUEST_FILENAME}.php -f
 RewriteRule ^(.+)$ $1.php [L,QSA]
 </IfModule>
 
-# Fichiers sensibles jamais servis
-<FilesMatch "^(ADMIN\.md|CREDITS\.md|LICENSE|.*\.json)$">
-  <IfModule mod_authz_core.c>
-    Require all denied
-  </IfModule>
-</FilesMatch>
+# En-têtes de sécurité
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set Permissions-Policy "camera=(), microphone=(), geolocation=()"
+    # Pages d'administration et API jamais indexées
+    <If "%{REQUEST_URI} =~ m#/(admin|api|login)(/|$)#">
+        Header always set X-Robots-Tag "noindex, nofollow"
+    </If>
+</IfModule>
+
+# Compression
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/css text/xml application/javascript application/json application/xml application/manifest+json image/svg+xml
+</IfModule>
+
+# Cache navigateur (les icônes et le CSS ont un paramètre de version quand ils changent)
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresDefault "access plus 1 hour"
+    ExpiresByType text/html "access plus 0 seconds"
+    ExpiresByType application/xml "access plus 1 hour"
+    ExpiresByType text/css "access plus 7 days"
+    ExpiresByType application/javascript "access plus 7 days"
+    ExpiresByType image/webp "access plus 30 days"
+    ExpiresByType image/jpeg "access plus 30 days"
+    ExpiresByType image/png "access plus 30 days"
+    ExpiresByType image/svg+xml "access plus 30 days"
+    ExpiresByType image/x-icon "access plus 30 days"
+    ExpiresByType image/vnd.microsoft.icon "access plus 30 days"
+    ExpiresByType font/woff2 "access plus 1 year"
+</IfModule>

@@ -3,6 +3,7 @@ Disallow: /admin/
 Disallow: /api/
 Disallow: /data/
 Disallow: /inc/
+Disallow: /login
 Disallow: /router.php
 
-Sitemap: https://alloprint.ma/sitemap.php
+Sitemap: https://alloprint.ma/sitemap.xml

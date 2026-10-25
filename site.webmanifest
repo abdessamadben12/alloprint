@@ -1,0 +1,13 @@
+{
+  "name": "AlloPrint — Imprimerie à Casablanca",
+  "short_name": "AlloPrint",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#00677a",
+  "theme_color": "#00677a",
+  "icons": [
+    { "src": "images/favicon/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "images/favicon/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "images/favicon/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

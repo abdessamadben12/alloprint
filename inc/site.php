@@ -1,6 +1,7 @@
 <?php
 /** Gabarit public partagé par les pages PHP (articles). Même en-tête et pied de page que les pages HTML. */
 declare(strict_types=1);
+require_once __DIR__ . '/config.php';
 
 function site_header(array $meta, string $current = ''): void
 {
@@ -61,7 +62,7 @@ HTML;
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title><?= e($title) ?></title>
 <meta name="description" content="<?= e($desc) ?>">
-<?php if ($noindex): ?><meta name="robots" content="noindex"><?php endif; ?>
+<meta name="robots" content="<?= $noindex ? 'noindex, follow' : 'index, follow, max-image-preview:large' ?>">
 <?php if ($canonical): ?><link rel="canonical" href="<?= e($canonical) ?>"><?php endif; ?>
 <meta property="og:type" content="<?= e($type) ?>">
 <meta property="og:site_name" content="AlloPrint">
@@ -71,7 +72,11 @@ HTML;
 <?php if ($canonical): ?><meta property="og:url" content="<?= e($canonical) ?>"><?php endif; ?>
 <?php if ($image): ?><meta property="og:image" content="<?= e($image) ?>"><meta name="twitter:card" content="summary_large_image"><?php else: ?><meta name="twitter:card" content="summary"><?php endif; ?>
 <?= $meta['head_extra'] ?? '' ?>
-<link rel="icon" type="image/png" href="images/logo.png">
+<link rel="icon" href="favicon.ico?v=2" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32.png?v=2">
+<link rel="apple-touch-icon" href="images/favicon/apple-touch-icon.png?v=2">
+<link rel="manifest" href="site.webmanifest">
+<meta name="theme-color" content="#00677a">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.gstatic.com/s/gabarito/v9/QGYtz_0dZAGKJJ4t3HtoW4U.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="https://fonts.gstatic.com/s/rethinksans/v7/AMOWz4SDuXOMCPfdoglY9JQEVFi3.woff2" as="font" type="font/woff2" crossorigin>
@@ -125,7 +130,8 @@ function site_footer(): void
 /** Adresse absolue d'un chemin du site (pour canonical / Open Graph). */
 function site_url(string $path = ''): string
 {
-    return site_abs_url($path);
+    // URL de production fixe (inc/config.php) : canonical et Open Graph identiques en local et en ligne
+    return public_base_url() . '/' . ltrim($path, '/');
 }
 
 /** Chemin de la page en cours (sans domaine), pour les ancres internes. */
