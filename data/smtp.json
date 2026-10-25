@@ -1,0 +1,11 @@
+{
+    "host": "mail.alloprint.ma",
+    "port": 465,
+    "secure": "ssl",
+    "username": "contact@alloprint.ma",
+    "password": "06800824672004Ab.",
+    "from_email": "contact@alloprint.ma",
+    "from_name": "AlloPrint",
+    "to_email": "contact@alloprint.ma",
+    "confirm": true
+}
