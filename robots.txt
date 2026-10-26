@@ -1,9 +1,9 @@
+# Pages publiques et ressources CSS, JavaScript et images accessibles.
 User-agent: *
-Disallow: /admin/
 Disallow: /api/
 Disallow: /data/
 Disallow: /inc/
-Disallow: /login
+Disallow: /admin/inc/
 Disallow: /router.php
 
 Sitemap: https://alloprint.ma/sitemap.xml

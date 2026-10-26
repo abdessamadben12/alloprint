@@ -1,7 +1,6 @@
 # AlloPrint — Apache 2.4 (cPanel / XAMPP)
 # Adresses propres : /services, /contact, /devis, /articles, /article/mon-article, /login, /admin/…
 DirectoryIndex index.html index.php
-ErrorDocument 404 /404.php
 Options -Indexes -MultiViews
 AddDefaultCharset UTF-8
 AddType application/manifest+json .webmanifest
@@ -29,6 +28,7 @@ RewriteRule ^(?:data|inc|admin/inc)(?:/|$) - [F,L,NC]
 RewriteRule ^uploads/.*\.(?:php[0-9]?|phtml|phar|cgi|pl|py|sh|html?|svg)$ - [F,L,NC]
 
 # Sitemap
+RewriteRule ^site\.xml$ %{ENV:BASE}sitemap.xml [R=301,L]
 RewriteRule ^sitemap\.xml$ sitemap.php [L]
 
 # Fichier de validation Google Search Console : servi tel quel, sans redirection
@@ -74,7 +74,7 @@ RewriteCond %{REQUEST_METHOD} GET
 RewriteCond %{THE_REQUEST} \s[^?\s]*/articles\.php[\s?]
 RewriteRule ^articles\.php$ %{ENV:BASE}articles [R=301,L]
 
-RewriteCond %{REQUEST_METHOD} GET
+RewriteCond %{REQUEST_METHOD} ^(?:GET|HEAD)$
 RewriteCond %{THE_REQUEST} \s[^?\s]*/sitemap\.php[\s?]
 RewriteRule ^sitemap\.php$ %{ENV:BASE}sitemap.xml [R=301,L]
 
@@ -99,6 +99,11 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME}.php -f
 RewriteRule ^(.+)$ $1.php [L,QSA]
+
+# Page 404 dans le même dossier : fonctionne aussi sous /site/.
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ 404.php [L]
 </IfModule>
 
 # En-têtes de sécurité

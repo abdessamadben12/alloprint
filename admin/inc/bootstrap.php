@@ -70,7 +70,10 @@ function send_security_headers(): void
     header('X-Frame-Options: DENY');
     header('X-Content-Type-Options: nosniff');
     header('Referrer-Policy: same-origin');
-    header('Cache-Control: no-store');
+    header('Cache-Control: private, no-store, no-cache, must-revalidate, max-age=0');
+    header('Pragma: no-cache');
+    header('Expires: Thu, 01 Jan 1970 00:00:00 GMT');
+    header('X-LiteSpeed-Cache-Control: no-cache');
 }
 
 /* ---------- Stockage JSON ---------- */
@@ -123,6 +126,8 @@ function is_logged_in(): bool
 function require_login(): void
 {
     if (!is_logged_in()) {
+        // La redirection elle-même ne doit pas être indexée (admin/ reste explorable dans robots.txt)
+        send_security_headers();
         redirect_to('login');
     }
     // expiration après 2 h d'inactivité
@@ -203,15 +208,33 @@ function csrf_field(): string
     return '<input type="hidden" name="csrf" value="' . e(csrf_token()) . '">';
 }
 
-function check_csrf(): void
+/** Vérifie le formulaire sans interrompre l'affichage de la page de connexion. */
+function csrf_error(): ?string
 {
     start_session();
     $sent = $_POST['csrf'] ?? '';
-    if (!is_string($sent) || empty($_SESSION['csrf']) || !hash_equals($_SESSION['csrf'], $sent)) {
-        http_response_code(400);
-        $why = session_storage_problem();
-        exit($why ?? 'Session expirée ou requête invalide. Rechargez la page et réessayez.');
+    if (is_string($sent) && is_string($_SESSION['csrf'] ?? null)
+        && $sent !== '' && hash_equals($_SESSION['csrf'], $sent)) {
+        return null;
     }
+    if ($why = session_storage_problem()) return $why;
+    if (empty($_COOKIE[session_name()])) {
+        return 'Le cookie de connexion n’a pas été reçu. Autorisez les cookies pour ce site, puis renvoyez le formulaire.';
+    }
+    return 'Le formulaire a expiré ou la session a été renouvelée. Saisissez à nouveau votre mot de passe pour réessayer.';
+}
+
+function check_csrf(): void
+{
+    if (($error = csrf_error()) === null) return;
+    http_response_code(419);
+    header('Content-Type: text/html; charset=utf-8');
+    send_security_headers();
+    echo '<!doctype html><html lang="fr"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">'
+        . '<title>Formulaire expiré — AlloPrint</title><h1>Formulaire non enregistré</h1><p>' . e($error) . '</p>'
+        . '<p>Aucune modification n’a été appliquée. Revenez au formulaire et rechargez la page avant de réessayer.</p>'
+        . '<p><a href="' . e(site_base_path() . 'login') . '">Revenir à la connexion</a></p></html>';
+    exit;
 }
 
 /* ---------- Messages flash ---------- */
@@ -272,7 +295,8 @@ function published_articles(): array
     return array_values(array_filter(all_articles(), static function (array $article): bool {
         $date = $article['date'] ?? '';
         return ($article['statut'] ?? '') === 'publie'
-            && preg_match('/^\d{4}-\d{2}-\d{2}$/', $date)
+            && preg_match('/^(\d{4})-(\d{2})-(\d{2})$/', $date, $parts)
+            && checkdate((int)$parts[2], (int)$parts[3], (int)$parts[1])
             && $date <= date('Y-m-d');
     }));
 }
@@ -304,7 +328,10 @@ function render_content(string $src): string
         $t = preg_replace('/(?<!\*)\*(?!\s)(.+?)(?<!\s)\*(?!\*)/u', '<em>$1</em>', $t);
         $t = preg_replace_callback('/\[([^\]]+)\]\(((?:https?:\/\/|\/|mailto:|tel:|#|[A-Za-z0-9][A-Za-z0-9\/_.-]*(?=[?#)]))[^\s)]*)\)/u', function ($m) {
             $ext = str_starts_with($m[2], 'http');
-            return '<a class="m-link" href="' . $m[2] . '"' . ($ext ? ' target="_blank" rel="noopener"' : '') . '>' . $m[1] . '</a>';
+            // Liens internes « page.html » → adresse propre (évite une redirection 301)
+            $href = $ext ? $m[2] : preg_replace('~^(?:index\.html(?=$|[?#])|([A-Za-z0-9_-]+)\.html(?=$|[?#]))~', '$1', $m[2]);
+            if ($href === '') $href = './';
+            return '<a class="m-link" href="' . $href . '"' . ($ext ? ' target="_blank" rel="noopener"' : '') . '>' . $m[1] . '</a>';
         }, $t);
         return $t;
     };

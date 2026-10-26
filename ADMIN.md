@@ -40,3 +40,13 @@ Voir aussi [CONFIGURATION.md](CONFIGURATION.md) (serveur, PHP Server dans VS Cod
 ## Tester en local
 - XAMPP : copiez `site/` dans `htdocs/alloprint/site/`, puis ouvrez http://localhost/alloprint/site/login.
 - Serveur PHP intégré : `php -S localhost:8000 router.php` dans le dossier `site/` (le routeur applique les adresses propres et les protections que ce serveur ne lit pas dans `.htaccess`).
+
+## Formulaire de connexion expiré
+
+Chaque formulaire contient un jeton associé à la session PHP. Si le cookie n’est pas transmis, si la session a disparu ou si un ancien formulaire reste ouvert après une mise à jour, ce jeton peut ne plus correspondre. La connexion refuse alors la requête sans vérifier le mot de passe ni compter une tentative échouée.
+
+La page réaffiche maintenant un formulaire utilisable avec son jeton courant et conserve l’adresse e-mail. Aucun mot de passe n’est réaffiché. Les en-têtes interdisent la mise en cache de l’administration, y compris dans LiteSpeed.
+
+Pour appliquer cette correction sur l’hébergement, transférer `admin/inc/bootstrap.php` et `admin/login.php`, puis rouvrir `https://alloprint.ma/login`. Si le problème persiste, autoriser les cookies, supprimer uniquement ceux d’AlloPrint et vérifier que PHP peut écrire dans `data/sessions/`. Ne pas supprimer `data/admin.json` : cela réinitialiserait le compte.
+
+Test de régression sans modifier les comptes réels : `python outils/verifier-connexion.py` depuis la racine du projet. Il teste une connexion valide, un jeton périmé, un cookie absent, une session perdue et le refus des requêtes forgées dans un site temporaire.

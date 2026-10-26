@@ -5,6 +5,9 @@ require_once __DIR__ . '/config.php';
 
 function site_header(array $meta, string $current = ''): void
 {
+    header('Content-Type: text/html; charset=utf-8');
+    header('X-Content-Type-Options: nosniff');
+    if (!empty($meta['noindex'])) header('X-Robots-Tag: noindex, follow');
     $title = $meta['title'] ?? 'AlloPrint';
     $desc = $meta['description'] ?? '';
     $canonical = $meta['canonical'] ?? '';
@@ -60,6 +63,15 @@ HTML;
 <meta charset="utf-8">
 <base href="<?= e(site_base_path()) ?>">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-TV21GEV6XM"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-TV21GEV6XM');
+</script>
 <title><?= e($title) ?></title>
 <meta name="description" content="<?= e($desc) ?>">
 <meta name="robots" content="<?= $noindex ? 'noindex, follow' : 'index, follow, max-image-preview:large' ?>">

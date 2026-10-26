@@ -75,9 +75,9 @@ Après un changement de domaine ou de sous-dossier, depuis la racine du projet :
 php outils/configurer-seo.php
 ```
 
-⚠️ **Ce script est obsolète** depuis le passage aux adresses sans extension : il réécrirait des URL canoniques en `.html`. Ne pas le relancer. Les balises SEO de chaque page sont maintenant dans le bloc `<!-- seo:start --> … <!-- seo:end -->` (canonical, Open Graph, données structurées LocalBusiness / Service / BreadcrumbList / FAQPage). Les titres et descriptions se modifient dans Admin › Référencement, qui met aussi à jour Open Graph et les données structurées. Adapter aussi le domaine de redirection dans `.htaccess`. Si le site est déployé dans un sous-dossier, reporter les règles de robots dans le **`robots.txt` à la racine du domaine**, car celui d’un sous-dossier n’est pas utilisé par les moteurs.
+Ce script **ne modifie plus le HTML** : il régénère `robots.txt` (règles définies dans `inc/seo.php`) et contrôle chaque page indexable — un seul canonical égal à l’adresse propre, `og:url`, longueur du titre (25–65) et de la description (70–160), un seul H1, JSON-LD valide, images avec `alt`, aucun lien interne en `.html`, et présence des mots-clés « palissade de chantier », « impression sur vinyle », « impression de vitrine », « impression sur bâche » dans le titre, la description et le H1 de leur page. Il se termine en erreur s’il reste un point à revoir. Les balises SEO de chaque page sont maintenant dans le bloc `<!-- seo:start --> … <!-- seo:end -->` (canonical, Open Graph, données structurées LocalBusiness / Service / BreadcrumbList / FAQPage). Les titres et descriptions se modifient dans Admin › Référencement, qui met aussi à jour Open Graph et les données structurées. Adapter aussi le domaine de redirection dans `.htaccess`. Si le site est déployé dans un sous-dossier, reporter les règles de robots dans le **`robots.txt` à la racine du domaine**, car celui d’un sous-dossier n’est pas utilisé par les moteurs.
 
-Le sitemap est **`https://alloprint.ma/sitemap.xml`** (servi par `sitemap.php` ; l’ancienne adresse `/sitemap.php` redirige). Il liste les adresses sans extension avec la date de dernière modification. Il inclut les pages publiques et les articles publiés à la date courante, en excluant les brouillons, les publications futures et les articles marqués `noindex`. Les modifications de publication sont prises en compte automatiquement.
+Le sitemap est **`https://alloprint.ma/sitemap.xml`** (servi par `sitemap.php` ; `/sitemap.php` et `/site.xml` redirigent en 301). Il liste les adresses sans extension, l’image principale de chaque page (extension image de Google) et, pour les articles, la date de dernière modification. Les pages HTML n’ont pas de `lastmod`, car la date du fichier change à chaque transfert FTP et ne reflète pas une vraie modification. Il inclut les pages publiques et les articles publiés à la date courante, en excluant les brouillons, les publications futures et les articles marqués `noindex`. Les modifications de publication sont prises en compte automatiquement.
 
 Les six articles se trouvent dans `data/articles.json` et sont modifiables depuis l’administration. Les pages de services, l’accueil et les articles sont reliés entre eux par des liens HTML. Les noms visibles privilégient « impression » ; l’ancienne URL `notre-imprimerie.html` est conservée pour préserver les liens existants.
 
@@ -90,6 +90,8 @@ Avec un serveur démarré :
 ```powershell
 python outils/verifier-site.py http://localhost:3000/site/
 ```
+
+`robots.txt` ne bloque pas `/admin/` ni `/login` : ces pages envoient `X-Robots-Tag: noindex`, et Google doit pouvoir les explorer pour lire cette consigne (une page bloquée peut quand même apparaître dans les résultats, sans description).
 
 Vérifier également l’accès aux articles, au formulaire de connexion (`/login`) et au sitemap (`/sitemap.xml`) sur l’hébergement réel. `data/articles.json`, `inc/config.php` et `.user.ini` doivent renvoyer **403**, un article inconnu **404**.
 

@@ -26,8 +26,20 @@ if (in_array($relative, ['index.php', 'index.html'], true)) {
 if (preg_match('~^impression-lettrage(?:\.html)?$~', $relative)) {
     header('Location: ' . $prefix . '/impression-vitrine', true, 301); exit;
 }
-if ($_SERVER['REQUEST_METHOD'] === 'GET' && preg_match('~^([a-z0-9-]+)\.html$~', $relative, $m)) {
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && preg_match('~^([a-z0-9-]+)\.html$~', $relative, $m)
+    && !preg_match('~^google[0-9a-f]+$~i', $m[1])) {
     header('Location: ' . $prefix . '/' . $m[1], true, 301); exit;
+}
+$redirect = null;
+if ($relative === 'site.xml' || ($relative === 'sitemap.php' && in_array($_SERVER['REQUEST_METHOD'], ['GET', 'HEAD'], true))) $redirect = 'sitemap.xml';
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    if ($relative === 'articles.php') $redirect = 'articles';
+    if ($relative === 'article.php' && is_string($_GET['slug'] ?? null) && preg_match('~^[a-z0-9-]+$~', $_GET['slug'])) $redirect = 'article/' . $_GET['slug'];
+    if ($relative === 'admin/login.php') $redirect = 'login' . (($_SERVER['QUERY_STRING'] ?? '') !== '' ? '?' . $_SERVER['QUERY_STRING'] : '');
+    if (preg_match('~^(.+)/$~', $relative, $m) && !is_dir(__DIR__ . '/' . $m[1])) $redirect = $m[1];
+}
+if ($redirect !== null) {
+    header('Location: ' . $prefix . '/' . $redirect, true, 301); exit;
 }
 if ($relative === 'sitemap.xml') $relative = 'sitemap.php';
 if ($relative === 'login') $relative = 'admin/login.php';

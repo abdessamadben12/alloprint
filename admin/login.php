@@ -11,8 +11,13 @@ $setup = $account === null;           // premier accès : création du compte
 $error = '';
 $locked = $setup ? 0 : login_locked_for();
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    check_csrf();
+$csrfError = $_SERVER['REQUEST_METHOD'] === 'POST' ? csrf_error() : null;
+if ($csrfError !== null) {
+    http_response_code(419);
+    $error = $csrfError;
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && $csrfError === null) {
     $user = post_str('username', 120);
     $pass = is_string($_POST['password'] ?? null) ? $_POST['password'] : '';
 
@@ -71,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <?php if (isset($_GET['expire'])): ?><p class="adm-flash adm-flash--error">Session expirée, reconnectez-vous.</p><?php endif; ?>
   <?php if ($error): ?><p class="adm-flash adm-flash--error" role="alert"><?= e($error) ?></p><?php endif; ?>
   <?php if ($why = session_storage_problem()): ?><p class="adm-flash adm-flash--error" role="alert"><?= e($why) ?></p><?php endif; ?>
-  <form method="post" autocomplete="on">
+  <form method="post" action="<?= e(site_base_path() . 'login') ?>" autocomplete="on">
     <?= csrf_field() ?>
     <div class="field">
       <label for="username">Adresse e-mail</label>
