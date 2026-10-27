@@ -8,6 +8,7 @@ function admin_header(string $title, string $active = ''): void
         './'       => ['dashboard', 'Tableau de bord'],
         'messages' => ['messages', 'Messages reçus'],
         'articles' => ['articles', 'Articles'],
+        'realisations' => ['realisations', 'Réalisations'],
         'prix'     => ['prix', 'Prix des services'],
         'seo'      => ['seo', 'Référencement (SEO)'],
         'smtp'     => ['smtp', 'Messagerie (SMTP)'],

@@ -13,7 +13,7 @@ $locked = $setup ? 0 : login_locked_for();
 
 $csrfError = $_SERVER['REQUEST_METHOD'] === 'POST' ? csrf_error() : null;
 if ($csrfError !== null) {
-    http_response_code(419);
+    http_response_code(403);
     $error = $csrfError;
 }
 

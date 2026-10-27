@@ -22,12 +22,12 @@ function site_header(array $meta, string $current = ''): void
     <div class="nav__bar wrap">
       <a class="nav__brand" href="./" title="Accueil"><img class="nav__logo" src="images/logo.png" alt="AlloPrint" width="160" height="128"></a>
       <nav class="nav__links" aria-label="Principal">
-        <a class="m-link" href="services">Services</a>
-        <a class="m-link" href="./#editions">Réalisations</a>
+        <a class="m-link" href="services-impression">Services</a>
+        <a class="m-link" href="./#edition-impression">Réalisations</a>
         <a class="m-link" href="notre-imprimerie">L’imprimerie</a>
-        <a class="m-link" href="contact">Contact</a>
+        <a class="m-link" href="contact-impression">Contact</a>
       </nav>
-      <a class="m-btn nav__cta" href="devis"><span class="m-btn__label">Demander un devis</span></a>
+      <a class="m-btn nav__cta" href="devis-impression"><span class="m-btn__label">Demander un devis</span></a>
       <button class="m-icon-btn nav__toggle" type="button" aria-expanded="false" aria-controls="menu"><span class="burger" aria-hidden="true"><i></i><i></i><i></i></span><span class="m-icon-btn__name">Ouvrir le menu</span></button>
     </div>
   </div>
@@ -38,13 +38,13 @@ function site_header(array $meta, string $current = ''): void
     </div>
     <nav class="nav__menu-links" aria-label="Menu">
       <a href="./"><span>Accueil</span><span class="nav__arrow" aria-hidden="true">→</span></a>
-      <a href="services"><span>Services</span><span class="nav__arrow" aria-hidden="true">→</span></a>
-      <a href="./#editions"><span>Réalisations</span><span class="nav__arrow" aria-hidden="true">→</span></a>
+      <a href="services-impression"><span>Services</span><span class="nav__arrow" aria-hidden="true">→</span></a>
+      <a href="./#edition-impression"><span>Réalisations</span><span class="nav__arrow" aria-hidden="true">→</span></a>
       <a href="notre-imprimerie"><span>L’imprimerie</span><span class="nav__arrow" aria-hidden="true">→</span></a>
-      <a href="contact"><span>Contact</span><span class="nav__arrow" aria-hidden="true">→</span></a>
+      <a href="contact-impression"><span>Contact</span><span class="nav__arrow" aria-hidden="true">→</span></a>
     </nav>
     <div class="nav__menu-extra">
-      <a class="m-btn nav__menu-cta" href="devis"><span class="m-btn__label">Demander un devis gratuit</span></a>
+      <a class="m-btn nav__menu-cta" href="devis-impression"><span class="m-btn__label">Demander un devis gratuit</span></a>
       <div class="nav__quick">
         <a href="tel:+212522484425"><img src="images/icons/telephone.svg" alt="" aria-hidden="true" width="28" height="28">Appeler</a>
         <a href="https://wa.me/212668746386" target="_blank" rel="noopener"><img src="images/icons/whatsapp.svg" alt="" aria-hidden="true" width="28" height="28">WhatsApp</a>
@@ -110,12 +110,12 @@ function site_footer(): void
       <nav class="footer__nav" aria-label="Pied de page">
         <ul>
           <li><a class="m-link" href="./">Accueil</a></li>
-          <li><a class="m-link" href="services">Services</a></li>
+          <li><a class="m-link" href="services-impression">Services</a></li>
           <li><a class="m-link" href="notre-imprimerie">Notre imprimerie</a></li>
           <li><a class="m-link" href="articles">Articles</a></li>
-          <li><a class="m-link" href="./#editions">Réalisations</a></li>
-          <li><a class="m-link" href="devis">Devis</a></li>
-          <li><a class="m-link" href="contact">Contact</a></li>
+          <li><a class="m-link" href="./#edition-impression">Réalisations</a></li>
+          <li><a class="m-link" href="devis-impression">Devis</a></li>
+          <li><a class="m-link" href="contact-impression">Contact</a></li>
         </ul>
       </nav>
       <p class="footer__address">3, avenue 2 Mars, Résidence Marwa, 5e étage<br>Casablanca, Maroc</p>

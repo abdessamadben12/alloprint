@@ -25,8 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($new !== '') $account['password_hash'] = password_hash($new, PASSWORD_DEFAULT);
         $account['updated'] = date('c');
         write_json('admin', $account);
-        $_SESSION['admin_user'] = $user;
-        session_regenerate_id(true);
+        login($user); // nouvelle empreinte du compte : les autres navigateurs sont déconnectés
         flash('ok', $new !== '' ? 'E-mail et mot de passe mis à jour.' : 'E-mail de connexion mis à jour.');
         redirect_to('admin/compte');
     }

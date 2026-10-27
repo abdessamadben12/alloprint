@@ -77,7 +77,7 @@ site_header([
         <p class="m-text-4">Notre service</p>
         <p><?= e($svc[0]) ?> à Casablanca : découvrez nos solutions et demandez votre devis gratuit.</p>
         <a class="m-btn-2" href="<?= e(str_replace('.html', '', $svc[1])) ?>"><span class="m-btn-2__label"><?= e($svc[0]) ?> ↗</span></a>
-        <a class="m-link" href="devis?service=<?= e($a['service']) ?>">Demander un devis pour ce service</a>
+        <a class="m-link" href="devis-impression?service=<?= e($a['service']) ?>">Demander un devis pour ce service</a>
       </div>
     <?php endif; ?>
     <?php if ($related): ?>

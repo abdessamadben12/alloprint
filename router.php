@@ -19,9 +19,13 @@ if (str_contains($relative, "\0") || str_contains($relative, '\\')
     || (str_starts_with(strtolower($relative), 'uploads/') && !preg_match('~\.(?:jpe?g|png|webp)$~i', $relative))) {
     http_response_code(403); exit('Accès interdit.');
 }
-// Mêmes adresses propres que le .htaccess (Apache) : /services, /article/mon-article, /login…
+// Mêmes adresses propres que le .htaccess (Apache) : /services-impression, /article/mon-article, /login…
 if (in_array($relative, ['index.php', 'index.html'], true)) {
     header('Location: ' . $prefix . '/', true, 301); exit;
+}
+if (preg_match('~^(services|contact|devis)(?:\.html)?$~', $relative, $m)) {
+    $qs = ($_SERVER['QUERY_STRING'] ?? '') !== '' ? '?' . $_SERVER['QUERY_STRING'] : '';
+    header('Location: ' . $prefix . '/' . $m[1] . '-impression' . $qs, true, 301); exit;
 }
 if (preg_match('~^impression-lettrage(?:\.html)?$~', $relative)) {
     header('Location: ' . $prefix . '/impression-vitrine', true, 301); exit;

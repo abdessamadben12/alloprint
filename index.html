@@ -196,26 +196,26 @@
 </style>
 <style data-8b-part="section:editions">
 @layer sections {
-  #editions { position: relative; overflow: clip; padding-block: var(--space-2); background: var(--color-1); color: var(--color-3); }
-  #editions .editions__head { align-items: end; row-gap: 20px; }
-  #editions .editions__head .m-text-2 { grid-column: 1 / 8; }
-  #editions .editions__head .m-text-5 { grid-column: 8 / 13; }
-  #editions .editions__rack { --rack-offset: 150px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0 24px; align-items: start; margin-top: 64px; }
-  #editions .editions__lane { display: grid; gap: 44px; }
-  #editions .editions__trail { --trail-cols: 28; height: var(--rack-offset); margin-bottom: -44px; }
-  #editions .editions__lane--high .editions__trail { margin: -44px 0 0; scale: 1 -1; }
-  #editions .edition { display: grid; gap: 10px; }
-  #editions .edition__photo { aspect-ratio: 3 / 4; margin-bottom: 6px; }
-  #editions .edition__buy { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; }
-  #editions .edition__price { font-family: var(--font-1); font-size: 24px; font-weight: 800; }
+  #edition-impression { position: relative; overflow: clip; padding-block: var(--space-2); background: var(--color-1); color: var(--color-3); }
+  #edition-impression .editions__head { align-items: end; row-gap: 20px; }
+  #edition-impression .editions__head .m-text-2 { grid-column: 1 / 8; }
+  #edition-impression .editions__head .m-text-5 { grid-column: 8 / 13; }
+  #edition-impression .editions__rack { --rack-offset: 150px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0 24px; align-items: start; margin-top: 64px; }
+  #edition-impression .editions__lane { display: grid; gap: 44px; }
+  #edition-impression .editions__trail { --trail-cols: 28; height: var(--rack-offset); margin-bottom: -44px; }
+  #edition-impression .editions__lane--high .editions__trail { margin: -44px 0 0; scale: 1 -1; }
+  #edition-impression .edition { display: grid; gap: 10px; }
+  #edition-impression .edition__photo { aspect-ratio: 3 / 4; margin-bottom: 6px; }
+  #edition-impression .edition__buy { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; }
+  #edition-impression .edition__price { font-family: var(--font-1); font-size: 24px; font-weight: 800; }
   @media (max-width: 899px) {
-    #editions .editions__head .m-text-2, #editions .editions__head .m-text-5 { grid-column: 1 / -1; }
-    #editions .editions__rack { --rack-offset: 96px; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 16px; margin-top: 44px; }
-    #editions .editions__lane { gap: 32px; }
-    #editions .editions__trail { margin-bottom: -32px; --trail-cols: 24; }
-    #editions .editions__lane--high .editions__trail { margin-top: -32px; }
-    #editions .editions__lane:nth-child(n + 3) { margin-top: 32px; }
-    #editions .edition__buy { flex-wrap: wrap; }
+    #edition-impression .editions__head .m-text-2, #edition-impression .editions__head .m-text-5 { grid-column: 1 / -1; }
+    #edition-impression .editions__rack { --rack-offset: 96px; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 16px; margin-top: 44px; }
+    #edition-impression .editions__lane { gap: 32px; }
+    #edition-impression .editions__trail { margin-bottom: -32px; --trail-cols: 24; }
+    #edition-impression .editions__lane--high .editions__trail { margin-top: -32px; }
+    #edition-impression .editions__lane:nth-child(n + 3) { margin-top: 32px; }
+    #edition-impression .edition__buy { flex-wrap: wrap; }
   }
 }
 </style>
@@ -281,12 +281,12 @@
     <div class="nav__bar wrap">
       <a class="nav__brand" href="#press" title="Retour en haut"><img class="nav__logo" src="images/logo.png" alt="AlloPrint" width="160" height="128"></a>
       <nav class="nav__links" aria-label="Principal">
-        <a class="m-link" href="services">Services</a>
-        <a class="m-link" href="#editions">Réalisations</a>
+        <a class="m-link" href="services-impression">Services</a>
+        <a class="m-link" href="#edition-impression">Réalisations</a>
         <a class="m-link" href="notre-imprimerie">L’atelier</a>
-        <a class="m-link" href="contact">Contact</a>
+        <a class="m-link" href="contact-impression">Contact</a>
       </nav>
-      <a class="m-btn nav__cta" href="devis"><span class="m-btn__label">Demander un devis</span></a>
+      <a class="m-btn nav__cta" href="devis-impression"><span class="m-btn__label">Demander un devis</span></a>
       <button class="m-icon-btn nav__toggle" type="button" aria-expanded="false" aria-controls="menu"><span class="burger" aria-hidden="true"><i></i><i></i><i></i></span><span class="m-icon-btn__name">Ouvrir le menu</span></button>
     </div>
   </div>
@@ -297,13 +297,13 @@
     </div>
     <nav class="nav__menu-links" aria-label="Menu">
       <a href="#press" aria-current="page"><span>Accueil</span><span class="nav__arrow" aria-hidden="true">→</span></a>
-      <a href="services"><span>Services</span><span class="nav__arrow" aria-hidden="true">→</span></a>
-      <a href="#editions"><span>Réalisations</span><span class="nav__arrow" aria-hidden="true">→</span></a>
+      <a href="services-impression"><span>Services</span><span class="nav__arrow" aria-hidden="true">→</span></a>
+      <a href="#edition-impression"><span>Réalisations</span><span class="nav__arrow" aria-hidden="true">→</span></a>
       <a href="notre-imprimerie"><span>L’atelier</span><span class="nav__arrow" aria-hidden="true">→</span></a>
-      <a href="contact"><span>Contact</span><span class="nav__arrow" aria-hidden="true">→</span></a>
+      <a href="contact-impression"><span>Contact</span><span class="nav__arrow" aria-hidden="true">→</span></a>
     </nav>
     <div class="nav__menu-extra">
-      <a class="m-btn nav__menu-cta" href="devis"><span class="m-btn__label">Demander un devis gratuit</span></a>
+      <a class="m-btn nav__menu-cta" href="devis-impression"><span class="m-btn__label">Demander un devis gratuit</span></a>
       <div class="nav__quick">
         <a href="tel:+212522484425"><img src="images/icons/telephone.svg" alt="" aria-hidden="true" width="28" height="28">Appeler</a>
         <a href="https://wa.me/212668746386" target="_blank" rel="noopener"><img src="images/icons/whatsapp.svg" alt="" aria-hidden="true" width="28" height="28">WhatsApp</a>
@@ -327,8 +327,8 @@
 <a class="m-link" href="impression-vitrine">Impression de vitrine</a>
 <a class="m-link" href="impression-bache">Impression sur bâche</a></nav>
       <div class="press__actions">
-        <a class="m-btn" href="devis"><span class="m-btn__label">Demander un devis</span></a>
-        <a class="m-link" href="#editions">Voir nos réalisations</a>
+        <a class="m-btn" href="devis-impression"><span class="m-btn__label">Demander un devis</span></a>
+        <a class="m-link" href="#edition-impression">Voir nos réalisations</a>
       </div>
     </div>
     <div class="press__visual">
@@ -444,12 +444,13 @@
   </div>
 </section>
 <!-- editions: portfolio: eight projects in four staggered lanes, each with photo, client, type and a quote link (animation: scene:editions-pistons) -->
-<section id="editions" class="editions" data-8b-section="editions" aria-labelledby="editions-title">
+<section id="edition-impression" class="editions" data-8b-section="editions" aria-labelledby="editions-title">
   <div class="wrap grid editions__head">
     <h2 id="editions-title" class="m-text-2" data-8b-motion="register">Nos réalisations.</h2>
     <p class="m-text-5">Stands, enseignes, affichage et habillage de véhicules : quelques projets réalisés pour nos clients.</p>
   </div>
   <div class="wrap editions__rack">
+<!-- realisations:start (généré par Admin › Réalisations) -->
     <div class="editions__lane editions__lane--low">
       <div class="editions__trail m-trail" aria-hidden="true"></div>
       <article class="edition">
@@ -510,6 +511,7 @@
       </article>
       <div class="editions__trail m-trail" aria-hidden="true"></div>
     </div>
+<!-- realisations:end -->
   </div>
 </section>
 <!-- workshops: services list: nine services with a short tag, description, examples and a quote link, beside a lane where a drum inks each row (animation: scene:workshops-index) -->
@@ -518,7 +520,7 @@
     <div class="workshops__head">
       <h2 id="workshops-title" class="m-text-2" data-8b-motion="register">Nos services d’impression.</h2>
       <p class="m-text-5">De votre enseigne commerciale aux impressions grand format, un service de conseil et de création publicitaire adapté à chaque budget.</p>
-      <a class="m-link" href="services">Tous les services ↗</a>
+      <a class="m-link" href="services-impression">Tous les services ↗</a>
       <figure class="m-photo workshops__photo" data-8b-motion="screen"><img style="background:#f0f0f0" src="images/photos/industrie-publicitaire.webp" srcset="images/photos/industrie-publicitaire-640.webp 640w, images/photos/industrie-publicitaire.webp 1536w" sizes="(max-width: 899px) calc(100vw - 32px), 500px" alt="Stand publicitaire avec comptoir, fond imprimé, roll-up et présentoir à brochures" width="1536" height="1024" loading="lazy" decoding="async"></figure>
     </div>
     <div class="workshops__sheet">
@@ -604,8 +606,8 @@
     <h2 id="cta-title" class="cta__title m-text-2" data-8b-motion="register">Un projet en tête&nbsp;?</h2>
     <div class="cta__actions">
       <p class="m-text-5">Devis gratuit. Nous vous conseillons sur le support, le format et les finitions.</p>
-      <a class="m-btn" href="devis"><span class="m-btn__label">Demander un devis</span></a>
-      <a class="m-link" href="contact">Nous contacter</a>
+      <a class="m-btn" href="devis-impression"><span class="m-btn__label">Demander un devis</span></a>
+      <a class="m-link" href="contact-impression">Nous contacter</a>
     </div>
   </div>
 </section>
@@ -659,12 +661,12 @@
       <nav class="footer__nav" aria-label="Pied de page">
         <ul>
           <li><a class="m-link" href="./">Accueil</a></li>
-          <li><a class="m-link" href="services">Services</a></li>
+          <li><a class="m-link" href="services-impression">Services</a></li>
           <li><a class="m-link" href="notre-imprimerie">Notre atelier d’impression</a></li>
           <li><a class="m-link" href="articles">Articles</a></li>
-          <li><a class="m-link" href="#editions">Réalisations</a></li>
-          <li><a class="m-link" href="devis">Devis</a></li>
-          <li><a class="m-link" href="contact">Contact</a></li>
+          <li><a class="m-link" href="#edition-impression">Réalisations</a></li>
+          <li><a class="m-link" href="devis-impression">Devis</a></li>
+          <li><a class="m-link" href="contact-impression">Contact</a></li>
         </ul>
       </nav>
       <p class="footer__address">3, avenue 2 Mars, Résidence Marwa, 5e étage<br>Casablanca, Maroc</p>
@@ -772,7 +774,7 @@ queueMotion(() => {
 <script data-8b-part="scene:editions-pistons">
 queueMotion(() => {
   gsap.matchMedia().add('(prefers-reduced-motion: no-preference)', () => {
-    const section = document.getElementById('editions');
+    const section = document.getElementById('edition-impression');
     const rack = section.querySelector('.editions__rack');
     const low = section.querySelectorAll('.editions__lane--low');
     const high = section.querySelectorAll('.editions__lane--high');

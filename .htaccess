@@ -34,11 +34,14 @@ RewriteRule ^sitemap\.xml$ sitemap.php [L]
 # Fichier de validation Google Search Console : servi tel quel, sans redirection
 RewriteRule ^google[0-9a-f]+\.html$ - [L]
 
+# Pages renommées : /services, /contact, /devis → /…-impression (paramètres ?service= conservés)
+RewriteRule ^(services|contact|devis)(?:\.html)?$ %{ENV:BASE}$1-impression [R=301,L]
+
 # --- Ancien site alloprint.ma (www, .html / .php) : 301 vers la page équivalente ---
 RewriteRule ^(?:index-2\.html|indexe?\.php|index-\.php)$ %{ENV:BASE} [R=301,L]
-RewriteRule ^(?:contacte?\.php|rappel\.php)$ %{ENV:BASE}contact [R=301,L]
-RewriteRule ^(?:demande-devis\.php|Devis\.php|devis111\.php)$ %{ENV:BASE}devis [R=301,L]
-RewriteRule ^(?:service\.html|services\.php)$ %{ENV:BASE}services [R=301,L]
+RewriteRule ^(?:contacte?\.php|rappel\.php)$ %{ENV:BASE}contact-impression [R=301,L]
+RewriteRule ^(?:demande-devis\.php|Devis\.php|devis111\.php)$ %{ENV:BASE}devis-impression [R=301,L]
+RewriteRule ^(?:service\.html|services\.php)$ %{ENV:BASE}services-impression [R=301,L]
 RewriteRule ^(?:presentation\.html|imprimerie\.html|references\.php|Copie\ de\ references\.php)$ %{ENV:BASE}notre-imprimerie [R=301,L]
 RewriteRule ^blog\.html$ %{ENV:BASE}articles [R=301,L]
 RewriteRule ^conception-graphique\.html$ %{ENV:BASE}design-graphique [R=301,L]

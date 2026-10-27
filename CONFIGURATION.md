@@ -1,6 +1,6 @@
 # Configuration AlloPrint : HTML, PHP et référencement
 
-L’accueil est **`index.html`**, les services restent des fichiers `.html`, mais **les adresses publiques n’ont plus d’extension** : `/services`, `/impression-vinyle`, `/articles`, `/article/mon-article`, `/login`, `/admin/…`. Les anciennes adresses en `.html` / `.php` redirigent en 301. Ce sont le `.htaccess` (Apache) et `router.php` (développement) qui font la correspondance. PHP gère les articles, l’administration, les prix, les formulaires (SMTP) et le sitemap.
+L’accueil est **`index.html`**, les services restent des fichiers `.html`, mais **les adresses publiques n’ont plus d’extension** : `/services-impression`, `/contact-impression`, `/devis-impression`, `/impression-vinyle`, `/articles`, `/article/mon-article`, `/login`, `/admin/…`. Les anciennes adresses en `.html` / `.php` redirigent en 301. Ce sont le `.htaccess` (Apache) et `router.php` (développement) qui font la correspondance. PHP gère les articles, l’administration, les prix, les formulaires (SMTP) et le sitemap.
 
 ## Démarrer dans votre environnement Windows
 

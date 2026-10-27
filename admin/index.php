@@ -20,6 +20,7 @@ admin_header('Tableau de bord', 'dashboard');
   <h2>Actions rapides</h2>
   <div class="actions">
     <a class="btn" href="article">+ Nouvel article</a>
+    <a class="btn btn--ghost" href="realisations">Modifier les réalisations</a>
     <a class="btn btn--ghost" href="prix">Modifier les prix</a>
     <a class="btn btn--ghost" href="seo">Titres et descriptions des pages</a>
     <a class="btn btn--ghost" href="../articles" target="_blank" rel="noopener">Voir la page Articles ↗</a>

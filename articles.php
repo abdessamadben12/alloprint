@@ -40,7 +40,7 @@ site_header([
 <section class="band band--paper" aria-label="Liste des articles">
   <div class="wrap">
   <?php if (!$articles): ?>
-    <p class="m-text-5">Les premiers articles arrivent bientôt. En attendant, découvrez <a class="m-link" href="services">nos services</a>.</p>
+    <p class="m-text-5">Les premiers articles arrivent bientôt. En attendant, découvrez <a class="m-link" href="services-impression">nos services</a>.</p>
   <?php else: ?>
     <div class="svc-grid">
     <?php foreach ($articles as $a): $url = 'article/' . rawurlencode($a['slug']); ?>
@@ -68,7 +68,7 @@ site_header([
     <h2 id="cta-title" class="cta__title m-text-2" data-8b-motion="register">Un projet<br>à imprimer ?</h2>
     <div class="cta__actions">
       <p class="m-text-5">Devis gratuit. Nous vous conseillons sur le support, le format et les finitions.</p>
-      <a class="m-btn" href="devis"><span class="m-btn__label">Demander un devis</span></a>
+      <a class="m-btn" href="devis-impression"><span class="m-btn__label">Demander un devis</span></a>
       <a class="m-link" href="tel:+212522484425">Ou appelez le 05 22 48 44 25</a>
     </div>
   </div>

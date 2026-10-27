@@ -12,6 +12,8 @@ const SITE_ROOT = __DIR__ . '/../..';
 const DATA_DIR = SITE_ROOT . '/data';
 const UPLOAD_DIR = SITE_ROOT . '/uploads/articles';
 const UPLOAD_URL = 'uploads/articles';
+const REAL_UPLOAD_DIR = SITE_ROOT . '/uploads/realisations';
+const REAL_UPLOAD_URL = 'uploads/realisations';
 const MAX_UPLOAD_BYTES = 4 * 1024 * 1024; // 4 Mo
 const LOGIN_MAX_ATTEMPTS = 5;
 const LOGIN_LOCK_SECONDS = 900; // 15 minutes
@@ -31,37 +33,82 @@ const SERVICES = [
 ];
 
 /* ---------- Session ---------- */
-function start_session(): void
+/*
+ * Session sans stockage sur le serveur : l'état (utilisateur connecté, jeton CSRF, messages)
+ * est gardé dans un cookie signé HMAC-SHA256. Aucun dossier de sessions n'est nécessaire ;
+ * seule la clé secrète data/cle-session.php est créée automatiquement au premier accès.
+ */
+const SESSION_COOKIE = 'alloprint_admin';
+const SESSION_IDLE = 7200; // déconnexion après 2 h d'inactivité
+
+function session_key(): string
 {
-    if (session_status() === PHP_SESSION_ACTIVE) return;
-    // Sessions enregistrées dans data/sessions (protégé par data/.htaccess) : certains hébergeurs
-    // ne laissent pas PHP écrire dans leur dossier de sessions par défaut, ce qui casse la connexion.
-    $dir = DATA_DIR . '/sessions';
-    if (!is_dir($dir)) @mkdir($dir, 0700, true);
-    if (is_dir($dir) && is_writable($dir)) {
-        session_save_path($dir);
-        ini_set('session.gc_probability', '1');
-        ini_set('session.gc_divisor', '50');
-        ini_set('session.gc_maxlifetime', '7200');
+    static $key = null;
+    if ($key !== null) return $key;
+    $file = DATA_DIR . '/cle-session.php';
+    for ($try = 0; $try < 2; $try++) {
+        if (is_file($file)) {
+            $k = include $file;
+            if (is_string($k) && strlen($k) >= 64) return $key = $k;
+        }
+        $fh = @fopen($file, 'x'); // création exclusive : une seule clé, même en cas d'accès simultanés
+        if ($fh) {
+            fwrite($fh, "<?php return '" . bin2hex(random_bytes(32)) . "';\n");
+            fclose($fh);
+            @chmod($file, 0600);
+        } elseif (!is_file($file)) {
+            break;
+        }
     }
-    $secure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
-        || strtolower((string)($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '')) === 'https';
-    session_name('alloprint_admin');
-    session_set_cookie_params([
-        'lifetime' => 0, 'path' => site_base_path(), 'secure' => $secure,
-        'httponly' => true, 'samesite' => 'Lax',
-    ]);
-    session_start();
+    return $key = '';
 }
 
-/** Indique pourquoi la session ne tient pas d'une requête à l'autre (diagnostic affiché à la connexion). */
+function b64url(string $s): string { return rtrim(strtr(base64_encode($s), '+/', '-_'), '='); }
+function b64url_decode(string $s): string { return (string)base64_decode(strtr($s, '-_', '+/'), true); }
+
+/** Lit et vérifie le cookie une fois par requête ; crée le jeton CSRF si besoin. */
+function start_session(): void
+{
+    if (array_key_exists('ap_session', $GLOBALS)) return;
+    $state = [];
+    $raw = $_COOKIE[SESSION_COOKIE] ?? '';
+    $GLOBALS['ap_cookie_received'] = is_string($raw) && $raw !== '';
+    $key = session_key();
+    if ($key !== '' && is_string($raw) && preg_match('/^([A-Za-z0-9_-]+)\.([A-Za-z0-9_-]{43})$/', $raw, $m)) {
+        if (hash_equals(b64url(hash_hmac('sha256', $m[1], $key, true)), $m[2])) {
+            $data = json_decode(b64url_decode($m[1]), true);
+            if (is_array($data)) $state = $data;
+        }
+    }
+    $GLOBALS['ap_session'] = $state;
+    // messages flash : affichés une seule fois
+    $GLOBALS['ap_flash'] = is_array($state['f'] ?? null) ? $state['f'] : [];
+    $changed = !empty($state['f']);
+    unset($GLOBALS['ap_session']['f']);
+    if (empty($GLOBALS['ap_session']['c']) || !is_string($GLOBALS['ap_session']['c'])) {
+        $GLOBALS['ap_session']['c'] = bin2hex(random_bytes(32));
+        $changed = true;
+    }
+    if ($changed) save_session();
+}
+
+/** Envoie le cookie signé (avant toute sortie HTML). */
+function save_session(): void
+{
+    if (headers_sent() || ($key = session_key()) === '') return;
+    $payload = b64url(json_encode($GLOBALS['ap_session'] ?? [], JSON_UNESCAPED_UNICODE));
+    $value = $payload . '.' . b64url(hash_hmac('sha256', $payload, $key, true));
+    $secure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+        || strtolower((string)($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '')) === 'https';
+    setcookie(SESSION_COOKIE, $value, ['expires' => 0, 'path' => site_base_path(), 'secure' => $secure, 'httponly' => true, 'samesite' => 'Lax']);
+    $_COOKIE[SESSION_COOKIE] = $value;
+}
+
+/** Indique pourquoi la connexion ne peut pas tenir (diagnostic affiché à la connexion). */
 function session_storage_problem(): ?string
 {
-    $dir = DATA_DIR . '/sessions';
-    if (is_dir($dir) && is_writable($dir)) return null;
-    $path = session_save_path() ?: sys_get_temp_dir();
-    if (is_dir($path) && is_writable($path)) return null;
-    return 'Le serveur ne peut pas enregistrer les sessions : rendez le dossier data/ modifiable par PHP (droits 755 ou 775 dans le gestionnaire de fichiers cPanel), puis rechargez la page.';
+    if (session_key() !== '') return null;
+    return 'Le serveur ne peut pas créer la clé de connexion : rendez le dossier data/ modifiable par PHP (droits 755 dans le gestionnaire de fichiers cPanel), puis rechargez la page.';
 }
 
 function send_security_headers(): void
@@ -117,10 +164,19 @@ function admin_account(): ?array
     return !empty($a['username']) && !empty($a['password_hash']) ? $a : null;
 }
 
+/** Empreinte du compte : changer l'e-mail ou le mot de passe déconnecte les autres navigateurs. */
+function account_fingerprint(): string
+{
+    $a = admin_account();
+    return $a ? substr(hash_hmac('sha256', $a['username'] . '|' . $a['password_hash'], session_key()), 0, 32) : '';
+}
+
 function is_logged_in(): bool
 {
     start_session();
-    return !empty($_SESSION['admin_user']);
+    $s = $GLOBALS['ap_session'];
+    return !empty($s['u']) && is_string($s['v'] ?? null) && account_fingerprint() !== ''
+        && hash_equals(account_fingerprint(), $s['v']);
 }
 
 function require_login(): void
@@ -131,30 +187,26 @@ function require_login(): void
         redirect_to('login');
     }
     // expiration après 2 h d'inactivité
-    if (!empty($_SESSION['last_seen']) && time() - $_SESSION['last_seen'] > 7200) {
+    if (time() - (int)($GLOBALS['ap_session']['t'] ?? 0) > SESSION_IDLE) {
         logout();
         redirect_to('login?expire=1');
     }
-    $_SESSION['last_seen'] = time();
+    $GLOBALS['ap_session']['t'] = time();
+    save_session();
 }
 
 function login(string $username): void
 {
     start_session();
-    session_regenerate_id(true);
-    $_SESSION['admin_user'] = $username;
-    $_SESSION['last_seen'] = time();
+    $GLOBALS['ap_session'] = ['u' => $username, 'v' => account_fingerprint(), 't' => time(), 'c' => bin2hex(random_bytes(32))];
+    save_session();
 }
 
 function logout(): void
 {
     start_session();
-    $_SESSION = [];
-    if (ini_get('session.use_cookies')) {
-        $p = session_get_cookie_params();
-        setcookie(session_name(), '', time() - 3600, $p['path'], $p['domain'] ?? '', $p['secure'], $p['httponly']);
-    }
-    session_destroy();
+    $GLOBALS['ap_session'] = ['c' => bin2hex(random_bytes(32))];
+    save_session();
 }
 
 /** Limitation des tentatives de connexion par adresse IP. */
@@ -199,8 +251,7 @@ function clear_login_failures(): void
 function csrf_token(): string
 {
     start_session();
-    if (empty($_SESSION['csrf'])) $_SESSION['csrf'] = bin2hex(random_bytes(32));
-    return $_SESSION['csrf'];
+    return (string)$GLOBALS['ap_session']['c'];
 }
 
 function csrf_field(): string
@@ -213,12 +264,12 @@ function csrf_error(): ?string
 {
     start_session();
     $sent = $_POST['csrf'] ?? '';
-    if (is_string($sent) && is_string($_SESSION['csrf'] ?? null)
-        && $sent !== '' && hash_equals($_SESSION['csrf'], $sent)) {
+    if (is_string($sent) && $sent !== '' && !empty($GLOBALS['ap_cookie_received'])
+        && hash_equals((string)$GLOBALS['ap_session']['c'], $sent)) {
         return null;
     }
     if ($why = session_storage_problem()) return $why;
-    if (empty($_COOKIE[session_name()])) {
+    if (empty($GLOBALS['ap_cookie_received'])) {
         return 'Le cookie de connexion n’a pas été reçu. Autorisez les cookies pour ce site, puis renvoyez le formulaire.';
     }
     return 'Le formulaire a expiré ou la session a été renouvelée. Saisissez à nouveau votre mot de passe pour réessayer.';
@@ -227,7 +278,7 @@ function csrf_error(): ?string
 function check_csrf(): void
 {
     if (($error = csrf_error()) === null) return;
-    http_response_code(419);
+    http_response_code(403);
     header('Content-Type: text/html; charset=utf-8');
     send_security_headers();
     echo '<!doctype html><html lang="fr"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">'
@@ -241,14 +292,18 @@ function check_csrf(): void
 function flash(string $type, string $msg): void
 {
     start_session();
-    $_SESSION['flash'][] = [$type, $msg];
+    $GLOBALS['ap_flash'][] = [$type, $msg];
+    // conservé dans le cookie pour la page suivante (redirection)
+    $GLOBALS['ap_session']['f'] = $GLOBALS['ap_flash'];
+    save_session();
 }
 
 function take_flashes(): array
 {
     start_session();
-    $f = $_SESSION['flash'] ?? [];
-    unset($_SESSION['flash']);
+    $f = $GLOBALS['ap_flash'];
+    $GLOBALS['ap_flash'] = [];
+    if (isset($GLOBALS['ap_session']['f'])) { unset($GLOBALS['ap_session']['f']); save_session(); }
     return $f;
 }
 
@@ -358,17 +413,101 @@ function format_date_fr(string $ymd): string
 }
 
 /** Enregistre une image envoyée ; renvoie le chemin public ou lève une exception. */
-function save_uploaded_image(array $file): string
+function save_uploaded_image(array $file, string $dir = UPLOAD_DIR, string $url = UPLOAD_URL): string
 {
     if (($file['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK) throw new RuntimeException('Envoi de l’image échoué.');
     if ($file['size'] > MAX_UPLOAD_BYTES) throw new RuntimeException('Image trop lourde (4 Mo maximum).');
     $info = @getimagesize($file['tmp_name']);
     $types = [IMAGETYPE_JPEG => 'jpg', IMAGETYPE_PNG => 'png', IMAGETYPE_WEBP => 'webp'];
     if (!$info || !isset($types[$info[2]])) throw new RuntimeException('Format accepté : JPG, PNG ou WebP.');
-    if (!is_dir(UPLOAD_DIR) && !mkdir(UPLOAD_DIR, 0755, true)) throw new RuntimeException('Dossier uploads/ introuvable.');
+    if (!is_dir($dir) && !mkdir($dir, 0755, true)) throw new RuntimeException('Dossier uploads/ introuvable.');
     $name = date('Ymd') . '-' . bin2hex(random_bytes(8)) . '.' . $types[$info[2]];
-    if (!move_uploaded_file($file['tmp_name'], UPLOAD_DIR . '/' . $name)) throw new RuntimeException('Impossible d’enregistrer l’image.');
-    return UPLOAD_URL . '/' . $name;
+    if (!move_uploaded_file($file['tmp_name'], $dir . '/' . $name)) throw new RuntimeException('Impossible d’enregistrer l’image.');
+    return $url . '/' . $name;
+}
+
+/* ---------- Réalisations (section « Nos réalisations » de l'accueil) ---------- */
+/** Liste des réalisations, dans l'ordre d'affichage. Premier accès : reprise de celles déjà dans index.html. */
+function all_realisations(): array
+{
+    $list = read_json('realisations', null);
+    return is_array($list) ? array_values($list) : realisations_from_html();
+}
+
+function realisations_from_html(): array
+{
+    $html = (string)@file_get_contents(SITE_ROOT . '/index.html');
+    preg_match_all('~<article class="edition">.*?<img[^>]*src="([^"]+)"[^>]*alt="([^"]*)".*?<h3[^>]*>(.*?)</h3>\s*<p class="edition__meta[^"]*">(.*?)</p>(?:.*?service=([a-z-]+))?.*?</article>~s', $html, $m, PREG_SET_ORDER);
+    $out = [];
+    foreach ($m as $row) {
+        $titre = html_entity_decode(strip_tags($row[3]), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        $type = html_entity_decode(strip_tags($row[4]), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        $out[] = [
+            'id' => substr(hash('sha256', $row[1]), 0, 16), 'titre' => $titre, 'type' => $type,
+            'image' => html_entity_decode($row[1], ENT_QUOTES | ENT_HTML5, 'UTF-8'),
+            'alt' => html_entity_decode($row[2], ENT_QUOTES | ENT_HTML5, 'UTF-8'),
+            'service' => array_key_exists($row[5] ?? '', SERVICES) ? $row[5] : realisation_guess_service($type . ' ' . $titre),
+            'visible' => true,
+        ];
+    }
+    return $out;
+}
+
+function realisation_guess_service(string $text): string
+{
+    $t = mb_strtolower($text);
+    foreach (['stand' => 'stands', 'véhicule' => 'habillage-vehicule', 'enseigne' => 'industrie-publicitaire', 'affiche' => 'grand-format',
+        'vitrine' => 'vitrine', 'bâche' => 'bache', 'vinyle' => 'vinyle', 'palissade' => 'palissade-chantier', 'design' => 'creation'] as $word => $key) {
+        if (str_contains($t, $word)) return $key;
+    }
+    return '';
+}
+
+/** HTML des réalisations visibles, réparties sur les 4 colonnes décalées de l'accueil. */
+function render_realisations_html(array $items): string
+{
+    $items = array_values(array_filter($items, fn($r) => !empty($r['visible']) && !empty($r['image'])));
+    $lanes = [[], [], [], []];
+    $per = max(1, (int)ceil(count($items) / 4));
+    foreach ($items as $i => $r) $lanes[min(3, intdiv($i, $per))][] = $r;
+    $trail = '      <div class="editions__trail m-trail" aria-hidden="true"></div>' . "\n";
+    $out = '';
+    foreach ($lanes as $n => $lane) {
+        $high = $n % 2 === 1;
+        $out .= '    <div class="editions__lane editions__lane--' . ($high ? 'high' : 'low') . '">' . "\n" . ($high ? '' : $trail);
+        foreach ($lane as $r) {
+            [$w, $h] = [720, 805];
+            $info = @getimagesize(SITE_ROOT . '/' . $r['image']);
+            if ($info) [$w, $h] = [$info[0], $info[1]];
+            $href = 'devis-impression' . (!empty($r['service']) && array_key_exists($r['service'], SERVICES) ? '?service=' . rawurlencode($r['service']) : '');
+            $out .= '      <article class="edition">' . "\n"
+                . '        <figure class="m-photo edition__photo"><img style="background:#e6e9ee" src="' . e($r['image']) . '" alt="' . e($r['alt'] ?: $r['titre']) . '" width="' . $w . '" height="' . $h . '" loading="lazy"></figure>' . "\n"
+                . '        <h3 class="m-text-6">' . e($r['titre']) . '</h3>' . "\n"
+                . ($r['type'] !== '' ? '        <p class="edition__meta m-text-4">' . e($r['type']) . '</p>' . "\n" : '')
+                . '        <p class="edition__buy"><a class="m-link" href="' . e($href) . '">Un projet similaire ?</a></p>' . "\n"
+                . '      </article>' . "\n";
+        }
+        $out .= ($high ? $trail : '') . '    </div>' . "\n";
+    }
+    return $out;
+}
+
+/** Enregistre la liste et met à jour la section de l'accueil (index.html). */
+function save_realisations(array $items): void
+{
+    $file = SITE_ROOT . '/index.html';
+    $html = file_get_contents($file);
+    if ($html === false) throw new RuntimeException('Lecture impossible de index.html.');
+    $re = '~(<!-- realisations:start[^>]*-->\n).*?(<!-- realisations:end -->)~s';
+    if (!preg_match($re, $html)) throw new RuntimeException('Repères de la section Réalisations introuvables dans index.html.');
+    $block = render_realisations_html($items);
+    $html = preg_replace_callback($re, fn($m) => $m[1] . $block . $m[2], $html, 1);
+    write_json('realisations', array_values($items));
+    $tmp = $file . '.' . bin2hex(random_bytes(4)) . '.tmp';
+    if (file_put_contents($tmp, $html, LOCK_EX) === false || !rename($tmp, $file)) {
+        @unlink($tmp);
+        throw new RuntimeException('Écriture impossible dans index.html. Vérifiez les droits du fichier.');
+    }
 }
 
 /* ---------- Prix ---------- */
@@ -395,10 +534,10 @@ function all_prices(): array
 /** Pages statiques dont le titre et la description sont modifiables depuis l'admin. */
 function seo_pages(): array
 {
-    $pages = ['index.html' => 'Accueil', 'services.html' => 'Services d’impression', 'notre-imprimerie.html' => 'Notre atelier d’impression'];
+    $pages = ['index.html' => 'Accueil', 'services-impression.html' => 'Services d’impression', 'notre-imprimerie.html' => 'Notre atelier d’impression'];
     foreach (SERVICES as [$label, $page]) $pages[$page] = $label;
-    $pages['contact.html'] = 'Contact';
-    $pages['devis.html'] = 'Devis';
+    $pages['contact-impression.html'] = 'Contact';
+    $pages['devis-impression.html'] = 'Devis';
     return $pages;
 }
 

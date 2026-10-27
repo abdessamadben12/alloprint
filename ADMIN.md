@@ -3,7 +3,7 @@
 ## Adresses
 - Connexion : **ton-domaine/login** (ex. https://alloprint.ma/login)
 - Administration : **ton-domaine/admin/**
-- Les pages du site n’ont plus d’extension : /services, /contact, /devis, /notre-imprimerie, /articles, /article/titre-de-l-article…
+- Les pages du site n’ont plus d’extension : /services-impression, /contact-impression, /devis-impression, /notre-imprimerie, /articles, /article/titre-de-l-article…
   Les anciennes adresses (.html / .php) redirigent automatiquement (301) vers les nouvelles.
   Tout cela passe par le fichier `.htaccess` à la racine du site (Apache : cPanel, XAMPP — module « rewrite » activé, ce qui est le cas par défaut).
 
@@ -22,6 +22,12 @@ Admin › **Messagerie (SMTP)** :
 
 Chaque demande est aussi enregistrée dans **Admin › Messages reçus** (même si l’e-mail ne part pas), avec un bouton « Répondre ».
 Protection anti-spam : champ piège invisible, délai minimum, 5 envois max. par 15 min et par adresse IP.
+
+## Réalisations
+
+Admin › **Réalisations** gère la section « Nos réalisations » de l’accueil (ancre `/#edition-impression`) : ajouter (photo JPG/PNG/WebP, format portrait), modifier, masquer, supprimer et changer l’ordre. Chaque enregistrement réécrit la section dans `index.html` (entre les repères `realisations:start` / `realisations:end`, à ne pas supprimer) ; les photos ajoutées vont dans `uploads/realisations/`. Le lien « Un projet similaire ? » ouvre le devis avec le service choisi.
+
+Les anciennes adresses /services, /contact et /devis redirigent en 301 vers les nouvelles.
 
 ## Le reste
 - **Articles** : création, image, publication, métadonnées SEO.
