@@ -467,9 +467,14 @@ function realisation_guess_service(string $text): string
 function render_realisations_html(array $items): string
 {
     $items = array_values(array_filter($items, fn($r) => !empty($r['visible']) && !empty($r['image'])));
+    // répartition équilibrée : 13 réalisations → 4 + 3 + 3 + 3
     $lanes = [[], [], [], []];
-    $per = max(1, (int)ceil(count($items) / 4));
-    foreach ($items as $i => $r) $lanes[min(3, intdiv($i, $per))][] = $r;
+    $base = intdiv(count($items), 4); $extra = count($items) % 4; $i = 0;
+    foreach ($lanes as $n => $_) {
+        $take = $base + ($n < $extra ? 1 : 0);
+        $lanes[$n] = array_slice($items, $i, $take);
+        $i += $take;
+    }
     $trail = '      <div class="editions__trail m-trail" aria-hidden="true"></div>' . "\n";
     $out = '';
     foreach ($lanes as $n => $lane) {
