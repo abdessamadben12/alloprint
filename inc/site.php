@@ -22,6 +22,7 @@ function site_header(array $meta, string $current = ''): void
     <div class="nav__bar wrap">
       <a class="nav__brand" href="./" title="Accueil"><img class="nav__logo" src="images/logo.png" alt="AlloPrint" width="160" height="128"></a>
       <nav class="nav__links" aria-label="Principal">
+        <a class="m-link" href="/">Accueil</a>
         <a class="m-link" href="services-impression">Services</a>
         <a class="m-link" href="./#edition-impression">Réalisations</a>
         <a class="m-link" href="notre-imprimerie">L’imprimerie</a>
@@ -84,9 +85,9 @@ HTML;
 <?php if ($canonical): ?><meta property="og:url" content="<?= e($canonical) ?>"><?php endif; ?>
 <?php if ($image): ?><meta property="og:image" content="<?= e($image) ?>"><meta name="twitter:card" content="summary_large_image"><?php else: ?><meta name="twitter:card" content="summary"><?php endif; ?>
 <?= $meta['head_extra'] ?? '' ?>
-<link rel="icon" href="favicon.ico?v=2" sizes="any">
-<link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32.png?v=2">
-<link rel="icon" type="image/png" sizes="192x192" href="images/favicon/icon-192.png?v=2">
+<link rel="icon" href="/favicon.ico?v=2" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/images/favicon/favicon-32.png?v=2">
+<link rel="icon" type="image/png" sizes="192x192" href="/images/favicon/icon-192.png?v=2">
 <link rel="apple-touch-icon" href="images/favicon/apple-touch-icon.png?v=2">
 <link rel="manifest" href="site.webmanifest">
 <meta name="theme-color" content="#00677a">
