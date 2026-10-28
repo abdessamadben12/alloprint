@@ -86,6 +86,7 @@ HTML;
 <?= $meta['head_extra'] ?? '' ?>
 <link rel="icon" href="favicon.ico?v=2" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32.png?v=2">
+<link rel="icon" type="image/png" sizes="192x192" href="images/favicon/icon-192.png?v=2">
 <link rel="apple-touch-icon" href="images/favicon/apple-touch-icon.png?v=2">
 <link rel="manifest" href="site.webmanifest">
 <meta name="theme-color" content="#00677a">
